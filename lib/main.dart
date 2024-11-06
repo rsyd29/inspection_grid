@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inspection_grid/pages/dynamic_inspection_with_concept_3.dart';
 import 'package:inspection_grid/pages/dynamic_inspection_with_grid.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Inspection Grid',
+      title: 'Page Inspection With',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -33,6 +34,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('Page Inspection With'),
+          centerTitle: true,
+        ),
         body: Center(
           child: Builder(
             builder: (context) => Column(
@@ -65,14 +70,13 @@ class MyApp extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const DynamicInspectionWithGrid(
-                          title:
-                              'Page Inspection with Grid\n(Konsep 1 + Konsep 2)',
+                          title: 'Grid\n(Konsep 1 + Konsep 2)',
                         ),
                       ),
                     );
                   },
                   child: Text(
-                    'Page Inspection with Grid\n(Konsep 1 + Konsep 2)',
+                    'Grid\n(Konsep 1 + Konsep 2)',
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -90,14 +94,15 @@ class MyApp extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DynamicInspectionWithGrid(
-                          title: 'Page Inspection with Grid\n(Konsep 3)',
+                        builder: (context) =>
+                            const DynamicInspectionWithConcept3(
+                          title: 'Thumbnail\n(Konsep 3)',
                         ),
                       ),
                     );
                   },
                   child: Text(
-                    'Page Inspection with Grid\n(Konsep 3)',
+                    'Thumbnail\n(Konsep 3)',
                     textAlign: TextAlign.center,
                   ),
                 ),

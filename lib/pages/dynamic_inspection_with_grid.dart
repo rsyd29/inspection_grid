@@ -97,14 +97,9 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
             cache == null ? {} : jsonDecode(cache);
         return Scaffold(
           appBar: AppBar(
-            title: GestureDetector(
-              onTap: () async {
-                await sss.getKey(key: 'task');
-              },
-              child: Text(
-                widget.title,
-                textAlign: TextAlign.center,
-              ),
+            title: Text(
+              widget.title,
+              textAlign: TextAlign.center,
             ),
             centerTitle: true,
           ),

@@ -57,11 +57,18 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Pertanyaan Component'.toUpperCase()),
+                  ),
                   DropdownButtonFormField(
                     isExpanded: true,
                     style: TextStyle(
                       overflow: TextOverflow.ellipsis,
                       color: Colors.black,
+                    ),
+                    decoration: InputDecoration(
+                      helperText: 'Silahkan pilih component terlebih dahulu.',
                     ),
                     items: (data['listComponent'] as List)
                         .map<DropdownMenuItem<String>>(

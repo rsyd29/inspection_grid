@@ -54,16 +54,51 @@ class MyApp extends StatelessWidget {
                 ),
                  */
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DynamicInspectionWithGrid(),
+                        builder: (context) => const DynamicInspectionWithGrid(
+                          title:
+                              'Page Inspection with Grid\n(Konsep 1 + Konsep 2)',
+                        ),
                       ),
                     );
                   },
                   child: Text(
-                    'Page Inspection with Grid',
+                    'Page Inspection with Grid\n(Konsep 1 + Konsep 2)',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DynamicInspectionWithGrid(
+                          title: 'Page Inspection with Grid\n(Konsep 3)',
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Page Inspection with Grid\n(Konsep 3)',
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],

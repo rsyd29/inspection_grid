@@ -9,7 +9,12 @@ import 'package:inspection_grid/services/secure_storage_service.dart';
 import 'show_dialog_image.dart';
 
 class DynamicInspectionWithGrid extends StatefulWidget {
-  const DynamicInspectionWithGrid({super.key});
+  const DynamicInspectionWithGrid({
+    super.key,
+    required this.title,
+  });
+
+  final String title;
 
   @override
   State<DynamicInspectionWithGrid> createState() =>
@@ -96,8 +101,12 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
               onTap: () async {
                 await sss.getKey(key: 'task');
               },
-              child: Text("Dynamic Inspection with Grid"),
+              child: Text(
+                widget.title,
+                textAlign: TextAlign.center,
+              ),
             ),
+            centerTitle: true,
           ),
           body: Center(
             child: FutureBuilder<Size>(

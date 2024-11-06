@@ -96,21 +96,21 @@ class CarouselDialogContent extends StatelessWidget {
                     // Ensure the key and value have distinct style
                     Padding(
                       padding: const EdgeInsets.only(
-                        bottom: 8.0,
                         left: 4.0,
                         right: 4.0,
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "${index + 1} - ${item['key']}", // Added index here
+                            "${index + 1}\n${item['key']}", // Added index here
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
                           ),
                           Text(
                             "${item['value']}",
@@ -124,6 +124,7 @@ class CarouselDialogContent extends StatelessWidget {
                       onPressed: () {
                         onDelete(index);
                       },
+                      padding: EdgeInsets.zero,
                     ),
                   ],
                 ),
@@ -131,9 +132,12 @@ class CarouselDialogContent extends StatelessWidget {
             }).toList(),
           ),
           SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('Close'),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Close'),
+            ),
           ),
         ],
       ),

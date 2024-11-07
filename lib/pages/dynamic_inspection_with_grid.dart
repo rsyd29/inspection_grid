@@ -42,6 +42,7 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
     String key,
     List<Map<String, dynamic>> items,
     String? cache,
+    int gridIndex,
   ) {
     showDialog(
       context: context,
@@ -51,6 +52,7 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: CarouselDialogContent(
+            gridIndex: gridIndex,
             items: items,
             onDelete: (p0) async {
               setState(() {
@@ -80,6 +82,17 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
                 key: 'task',
                 value: jsonEncode(dataCache),
               );
+            },
+            onEdit: (index) async {
+              Navigator.of(context).pop();
+              await showDialog(
+                context: context,
+                builder: (context) => ShowDialogQuestion(
+                  index: index,
+                  cache: cache,
+                ),
+              );
+              setState(() {});
             },
           ),
         );
@@ -185,6 +198,7 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
                                             '$index',
                                             items,
                                             cache,
+                                            index,
                                           );
                                         }
                                       : null,

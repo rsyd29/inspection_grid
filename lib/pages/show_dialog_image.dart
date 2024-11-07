@@ -8,12 +8,16 @@ import 'package:photo_view/photo_view_gallery.dart';
 class CarouselDialogContent extends StatelessWidget {
   const CarouselDialogContent({
     super.key,
+    required this.gridIndex,
     required this.items,
     required this.onDelete,
+    required this.onEdit,
   });
 
+  final int gridIndex;
   final List<Map<String, dynamic>> items;
   final Function(int) onDelete;
+  final Function(int) onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +123,24 @@ class CarouselDialogContent extends StatelessWidget {
                         ],
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        onDelete(index);
-                      },
-                      padding: EdgeInsets.zero,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            onEdit(gridIndex);
+                          },
+                          padding: EdgeInsets.zero,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            onDelete(index);
+                          },
+                          padding: EdgeInsets.zero,
+                        ),
+                      ],
                     ),
                   ],
                 ),

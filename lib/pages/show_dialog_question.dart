@@ -12,6 +12,7 @@ import '../generated/assets.dart';
 class ShowDialogQuestion extends StatefulWidget {
   final int index;
   final String? cache;
+
   const ShowDialogQuestion({
     super.key,
     required this.index,
@@ -24,20 +25,53 @@ class ShowDialogQuestion extends StatefulWidget {
 
 class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   Map<String, dynamic>? keyObject;
+  List<String> selectedDamages = [];
+  Map<String, MultiImagePickerController> damageImagesControllers = {};
   String? selectedValue;
+  late MultiImagePickerController controller;
 
-  final controller = MultiImagePickerController(
-    picker: (bool allowMultiple) async {
-      // use image_picker or file_picker to pick images `pickImages`
-      final pickedImages = await pickImagesUsingImagePicker(allowMultiple);
-      // convert the picked image list to `ImageFile` list and return it.
-      return pickedImages;
-    },
-  );
+  _ShowDialogQuestionState()
+      : controller = MultiImagePickerController(
+          picker: (allowMultiple) async {
+            final pickedImages =
+                await pickImagesUsingImagePicker(allowMultiple);
+            return pickedImages;
+          },
+          maxImages: 1,
+        ) {
+    controller.addListener(_updateImages);
+  }
+
+  void _updateImages() {
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in damageImagesControllers.values) {
+      controller.removeListener(_updateImages);
+    }
+    super.dispose();
+  }
+
+  // Use the damage as a key to access the respective controller
+  MultiImagePickerController _getOrCreateController(String damage) {
+    if (!damageImagesControllers.containsKey(damage)) {
+      damageImagesControllers[damage] = MultiImagePickerController(
+        picker: (allowMultiple) async {
+          final pickedImages = await pickImagesUsingImagePicker(allowMultiple);
+          return pickedImages;
+        },
+        maxImages: 1,
+      );
+      damageImagesControllers[damage]?.addListener(_updateImages);
+    }
+    return damageImagesControllers[damage]!;
   }
 
   @override
@@ -50,6 +84,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
           return CircularProgressIndicator(); // Tampilkan loading jika ukuran gambar belum didapat
         }
         final data = snapshot.data?['${widget.index}'];
+
+        if (data == null) return Text('No Data Available');
         return Material(
           child: SingleChildScrollView(
             child: Padding(
@@ -100,96 +136,116 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                   .toList()
                                   .firstOrNull?['answers'] ??
                               [])
+                          .where((e) => e['answer'] != 'BAIK')
                           .map<Widget>(
-                            (e) => ListTile(
-                              title: Text(
-                                e['answer'],
-                              ),
-                              leading: Radio<String>(
-                                value: e['answer'],
-                                groupValue: selectedValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValue = value;
-                                  });
-                                },
-                              ),
+                            (e) => CheckboxListTile(
+                              title: Text(e['answer']),
+                              value: selectedDamages.contains(e['answer']),
+                              onChanged: (checked) {
+                                setState(() {
+                                  if (checked == true) {
+                                    selectedDamages.add(e['answer']);
+                                    damageImagesControllers[e['answer']] =
+                                        _getOrCreateController(e['answer']);
+                                  } else {
+                                    selectedDamages.remove(e['answer']);
+                                    damageImagesControllers.remove(e['answer']);
+                                  }
+                                });
+                              },
                             ),
                           )
                           .toList(),
                     ),
                   ),
                   Visibility(
-                    visible: selectedValue != null,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: height * 0.4,
-                      child: MultiImagePickerView(
-                        controller: controller,
-                        draggable: true,
-                        longPressDelayMilliseconds: 250,
-                        onDragBoxDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .shadow
-                                  .withOpacity(0.5),
-                              blurRadius: 5,
+                    visible: selectedDamages.isNotEmpty,
+                    child: Column(
+                      children: selectedDamages
+                          .map(
+                            (damage) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Images for damage: $damage'),
+                                SizedBox(
+                                    width: double.infinity,
+                                    height: height * 0.2,
+                                    child: MultiImagePickerView(
+                                      controller:
+                                          _getOrCreateController(damage),
+                                      draggable: true,
+                                      longPressDelayMilliseconds: 250,
+                                      onDragBoxDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .shadow
+                                                .withOpacity(0.5),
+                                            blurRadius: 5,
+                                          ),
+                                        ],
+                                      ),
+                                      shrinkWrap: false,
+                                      padding: const EdgeInsets.all(0),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                                        maxCrossAxisExtent: 170,
+                                        childAspectRatio: 0.8,
+                                        crossAxisSpacing: 2,
+                                        mainAxisSpacing: 2,
+                                      ),
+                                      builder: (context, imageFile) {
+                                        return Stack(children: [
+                                          Positioned.fill(
+                                            child: ImageFileView(
+                                              imageFile: imageFile,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 4,
+                                            right: 4,
+                                            child: DraggableItemInkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                              onPressed: () =>
+                                                  _getOrCreateController(damage)
+                                                      .removeImage(imageFile),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary
+                                                      .withOpacity(0.4),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Icon(
+                                                  Icons.delete_forever_rounded,
+                                                  size: 18,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .surface,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ]);
+                                      },
+                                    )),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        shrinkWrap: false,
-                        padding: const EdgeInsets.all(0),
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 170,
-                          childAspectRatio: 0.8,
-                          crossAxisSpacing: 2,
-                          mainAxisSpacing: 2,
-                        ),
-                        builder: (context, imageFile) {
-                          return Stack(
-                            children: [
-                              Positioned.fill(
-                                child: ImageFileView(
-                                  imageFile: imageFile,
-                                ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: DraggableItemInkWell(
-                                  borderRadius: BorderRadius.circular(2),
-                                  onPressed: () =>
-                                      controller.removeImage(imageFile),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary
-                                          .withOpacity(0.4),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.delete_forever_rounded,
-                                      size: 18,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                          )
+                          .toList(),
                     ),
                   ),
                   Visibility(
-                    visible: selectedValue != null,
+                    visible: damageImagesControllers.isNotEmpty,
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -198,19 +254,19 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                               ? {}
                               : jsonDecode(widget.cache ?? '');
                           Map<String, dynamic>? dataSaving = {
-                            '${widget.index}': [
-                              {
+                            '${widget.index}': selectedDamages.map((damage) {
+                              return {
                                 'key': keyObject?['key'],
-                                'value': selectedValue,
-                                'images': controller.images
-                                    .map(
-                                      (e) => e.path,
-                                    )
-                                    .toList(),
+                                'value': damage,
+                                'images': damageImagesControllers[damage]
+                                        ?.images
+                                        .map((e) => e.path)
+                                        .toList() ??
+                                    [],
                                 'x': keyObject?['x'],
                                 'y': keyObject?['y'],
-                              },
-                            ],
+                              };
+                            }).toList(),
                           };
 
                           Map<String, dynamic>? dataMergedObject =

@@ -54,12 +54,41 @@ class CarouselDialogContent extends StatelessWidget {
 
                   // Update to handle `values` list
                   final valueWidgets = item['values'].map<Widget>((valueItem) {
-                    final imageWidgets = GestureDetector(
+                    return Column(
+                      children: [
+                        // Use CarouselSlider for images
+                        Container(
+                          height: 150.0,
+                          child: CarouselSlider.builder(
+                            itemCount: valueItem['images'].length,
+                            itemBuilder: (context, imageIndex, realIndex) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Image.file(
+                                  File(valueItem['images'][imageIndex]),
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(child: Text("Image not found"));
+                                  },
+                                ),
+                              );
+                            },
+                            options: CarouselOptions(
+                              enableInfiniteScroll: true,
+                              enlargeCenterPage: true,
+                              autoPlay: true,
+                            ),
+                          ),
+                        ),
+                        // ... unchanged code ...
+                      ],
+                    );
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => FullScreenImageView(
-                            imagePaths: [valueItem['image']], // Updated field
+                            imagePaths: [valueItem['images']], // Updated field
                             initialPage: 0,
                             keyText: item['key'],
                             valueText: valueItem['answer'],
@@ -71,7 +100,7 @@ class CarouselDialogContent extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: Image.file(
-                            File(valueItem['image']), // Single image path
+                            File(valueItem['images']), // Single image path
                             width: double.infinity,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
@@ -203,27 +232,34 @@ class CarouselDialogContent extends StatelessWidget {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 FullScreenImageView(
-                                              imagePaths: [valueItem['image']],
+                                              imagePaths: List<String>.from(
+                                                  valueItem['images']),
                                               initialPage: 0,
                                               keyText: item['key'],
                                               valueText: valueItem['answer'],
                                             ),
                                           ),
                                         ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                          child: Image.file(
-                                            File(valueItem['image']),
-                                            height: 150.0,
-                                            width: double.infinity,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Center(
-                                                  child:
-                                                      Text("Image not found"));
+                                        child: SizedBox(
+                                          height: 150.0,
+                                          child: PhotoViewGallery.builder(
+                                            itemCount:
+                                                valueItem['images'].length,
+                                            builder: (context, index) {
+                                              return PhotoViewGalleryPageOptions(
+                                                imageProvider: FileImage(File(
+                                                    valueItem['images']
+                                                        [index])),
+                                                minScale: PhotoViewComputedScale
+                                                    .contained,
+                                                maxScale: PhotoViewComputedScale
+                                                        .covered *
+                                                    2,
+                                              );
                                             },
+                                            pageController: PageController(),
+                                            scrollPhysics:
+                                                const BouncingScrollPhysics(),
                                           ),
                                         ),
                                       ),

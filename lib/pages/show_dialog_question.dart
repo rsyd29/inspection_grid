@@ -27,7 +27,7 @@ class ShowDialogQuestion extends StatefulWidget {
 
 class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   Map<String, dynamic>? keyObject;
-  List<String> selectedDamages = [];
+  List<(String, int)> selectedDamages = [];
   Map<String, MultiImagePickerController> damageImagesControllers = {};
   String? selectedValue;
   late MultiImagePickerController controller;
@@ -52,50 +52,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   void initState() {
     super.initState();
     if (widget.item != null) {
-      setState(() {
-        selectedValue = widget.item?['key'];
-        keyObject = (widget.item != null)
-            ? {
-                'key': widget.item?['key'],
-                'x': widget.item?['x'],
-                'y': widget.item?['y'],
-              }
-            : null;
-
-        // Set initial selected damages
-        var valuesList = widget.item?['values'] ?? [];
-        selectedDamages = [
-          for (var item in valuesList)
-            if (item is Map<String, dynamic>) item['answer'] as String
-        ];
-
-        for (var damage in selectedDamages) {
-          final controller = getOrCreateController(damage);
-          final imagePaths = [
-            for (var value in valuesList)
-              if (value is Map<String, dynamic> && value['answer'] == damage)
-                ...(value['image'] is String
-                    ? [value['image']]
-                    : value['image'] as List<String>? ?? [])
-          ];
-
-          for (var path in imagePaths) {
-            final fileName = path.split('/').last;
-            final fileExtension = fileName.split('.').last;
-
-            controller.updateImages(
-              [
-                ImageFile(
-                  path.hashCode.toString(),
-                  name: fileName,
-                  extension: fileExtension,
-                  path: path,
-                ),
-              ],
-            );
-          }
-        }
-      });
+      _initializeFromWidgetItem();
     }
   }
 
@@ -107,15 +64,88 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
     super.dispose();
   }
 
+  void _initializeFromWidgetItem() async {
+    var jsonData = await getJson();
+    setState(() {
+      selectedValue = widget.item?['key'];
+      keyObject = widget.item == null
+          ? null
+          : {
+              'key': widget.item?['key'],
+              'x': widget.item?['x'],
+              'y': widget.item?['y'],
+            };
+
+      // Set initial selected damages
+      var valuesList = widget.item?['values'] ?? [];
+      selectedDamages = [];
+      for (var i = 0; i < valuesList.length; i++) {
+        var item = valuesList[i];
+
+        if (item is Map<String, dynamic>) {
+          final listComponent =
+              jsonData['${widget.index}']['listComponent'] as List;
+          final component = listComponent.firstWhere(
+            (element) => element['key'] == widget.item?['key'],
+            orElse: () => null,
+          );
+
+          final answers = component?['answers'] as List?;
+          final answerObject = answers?.firstWhere(
+            (element) => element['answer'] == item['answer'],
+            orElse: () => null,
+          );
+
+          if (answerObject != null) {
+            selectedDamages
+                .add((item['answer'] as String, answerObject['limit'] as int));
+          }
+        }
+      }
+
+      for (var damage in selectedDamages) {
+        final controller = getOrCreateController(damage.$1, damage.$2);
+        final imagePaths = [];
+
+        for (var i = 0; i < valuesList.length; i++) {
+          var value = valuesList[i];
+          if (value is Map<String, dynamic> && value['answer'] == damage.$1) {
+            if (value['images'] is String) {
+              imagePaths.add(value['images']);
+            } else if (value['images'] is List<dynamic>) {
+              List<dynamic> imageList = value['images'] as List<dynamic>;
+              imagePaths
+                  .addAll(imageList.map((image) => image as String).toList());
+            }
+          }
+        }
+
+        final imageFiles = imagePaths.map((path) {
+          final fileName = path.split('/').last;
+          final fileExtension = fileName.split('.').last;
+
+          return ImageFile(
+            path.hashCode.toString(),
+            name: fileName,
+            extension: fileExtension,
+            path: path,
+          );
+        }).toList();
+
+        controller.updateImages(imageFiles);
+      }
+    });
+  }
+
   // Use the damage as a key to access the respective controller
-  MultiImagePickerController getOrCreateController(String damage) {
+  MultiImagePickerController getOrCreateController(String damage, int limit) {
     if (!damageImagesControllers.containsKey(damage)) {
       damageImagesControllers[damage] = MultiImagePickerController(
         picker: (allowMultiple) async {
           final pickedImages = await pickImagesUsingImagePicker(allowMultiple);
           return pickedImages;
         },
-        maxImages: 1,
+        maxImages: limit,
       );
       damageImagesControllers[damage]?.addListener(_updateImages);
     }
@@ -161,8 +191,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                   DropdownButtonFormField(
                     value: selectedValue,
                     isExpanded: true,
-                    style:
-                        TextStyle(color: Colors.black), // Improved typography
+                    style: TextStyle(color: Colors.black),
+                    // Improved typography
                     decoration: InputDecoration(
                       helperText: 'Silahkan pilih component terlebih dahulu.',
                     ),
@@ -202,15 +232,25 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                             .map<Widget>(
                               (e) => CheckboxListTile(
                                 title: Text(e['answer']),
-                                value: selectedDamages.contains(e['answer']),
+                                value: selectedDamages
+                                    .contains((e['answer'], e['limit'])),
                                 onChanged: (checked) {
                                   setState(() {
                                     if (checked == true) {
-                                      selectedDamages.add(e['answer']);
+                                      selectedDamages.add((
+                                        e['answer'] as String,
+                                        e['limit'] as int
+                                      ));
                                       damageImagesControllers[e['answer']] =
-                                          getOrCreateController(e['answer']);
+                                          getOrCreateController(
+                                        e['answer'],
+                                        e['limit'],
+                                      );
                                     } else {
-                                      selectedDamages.remove(e['answer']);
+                                      selectedDamages.remove((
+                                        e['answer'] as String,
+                                        e['limit'] as int
+                                      ));
                                       damageImagesControllers
                                           .remove(e['answer']);
                                     }
@@ -235,7 +275,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                   width: double.infinity,
                                   height: height * 0.2,
                                   child: MultiImagePickerView(
-                                    controller: getOrCreateController(damage),
+                                    controller: getOrCreateController(
+                                        damage.$1, damage.$2),
                                     draggable: true,
                                     longPressDelayMilliseconds: 250,
                                     onDragBoxDecoration: BoxDecoration(
@@ -273,7 +314,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                             borderRadius:
                                                 BorderRadius.circular(2),
                                             onPressed: () =>
-                                                getOrCreateController(damage)
+                                                getOrCreateController(
+                                                        damage.$1, damage.$2)
                                                     .removeImage(imageFile),
                                             child: Container(
                                               padding: const EdgeInsets.all(5),
@@ -341,11 +383,12 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                               // Inside ElevatedButton onPressed:
                               for (var damage in selectedDamages) {
                                 Map<String, dynamic> damageEntry = {
-                                  'answer': damage,
-                                  'image': damageImagesControllers[damage]
+                                  'answer': damage.$1,
+                                  'images': damageImagesControllers[damage.$1]
                                       ?.images
-                                      .firstOrNull
-                                      ?.path,
+                                      .whereType<ImageFile>()
+                                      .map((imageFile) => imageFile.path)
+                                      .toList(),
                                 };
 
                                 var entryIndex = existingEntries.indexWhere(
@@ -366,8 +409,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
 
                                   if (existingDamageIndex != -1) {
                                     // Update image for existing damage
-                                    valuesList[existingDamageIndex]['image'] =
-                                        damageEntry['image'];
+                                    valuesList[existingDamageIndex]['images'] =
+                                        damageEntry['images'];
                                   } else {
                                     // Add new damageEntry if it doesn't exist
                                     valuesList.add(damageEntry);

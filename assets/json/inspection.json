@@ -6,16 +6,20 @@
         "key": "BAN_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 1
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 5
           },
           {
-            "answer": "AUS"
+            "answer": "AUS",
+            "limit": 2
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 3
           }
         ],
         "x": 50,
@@ -26,13 +30,16 @@
         "key": "LIS_BODI_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 70,
@@ -43,16 +50,20 @@
         "key": "LAMPU_SEN_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "MENYALA"
+            "answer": "MENYALA",
+            "limit": 100
           },
           {
-            "answer": "MATI"
+            "answer": "MATI",
+            "limit": 100
           },
           {
-            "answer": "RETUR"
+            "answer": "RETUR",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 90,
@@ -61,22 +72,27 @@
     ]
   },
   "1": {
+    "limit": 100,
     "listComponent": [
       {
         "section": "BODY",
         "key": "LAMPU_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "MENYALA"
+            "answer": "MENYALA",
+            "limit": 100
           },
           {
-            "answer": "MATI"
+            "answer": "MATI",
+            "limit": 100
           },
           {
-            "answer": "RETUR"
+            "answer": "RETUR",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 150,
@@ -87,16 +103,20 @@
         "key": "GRILL_DEPAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "KARAT"
+            "answer": "KARAT",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 200,
@@ -107,16 +127,20 @@
         "key": "BEMPER_DEPAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "LEPAS"
+            "answer": "LEPAS",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 180,
@@ -131,16 +155,20 @@
         "key": "LAMPU_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "MENYALA"
+            "answer": "MENYALA",
+            "limit": 100
           },
           {
-            "answer": "MATI"
+            "answer": "MATI",
+            "limit": 100
           },
           {
-            "answer": "RETUR"
+            "answer": "RETUR",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 450,
@@ -151,16 +179,20 @@
         "key": "GRILL_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "KARAT"
+            "answer": "KARAT",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 400,
@@ -171,16 +203,20 @@
         "key": "LAMPU_SEN_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "MENYALA"
+            "answer": "MENYALA",
+            "limit": 100
           },
           {
-            "answer": "MATI"
+            "answer": "MATI",
+            "limit": 100
           },
           {
-            "answer": "RETUR"
+            "answer": "RETUR",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 470,
@@ -195,16 +231,20 @@
         "key": "BAN_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "AUS"
+            "answer": "AUS",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 550,
@@ -215,16 +255,20 @@
         "key": "LIS_BODI_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "KARAT"
+            "answer": "KARAT",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 530,
@@ -235,13 +279,16 @@
         "key": "SPION_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 510,
@@ -256,16 +303,20 @@
         "key": "PINTU_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PENYOK"
+            "answer": "PENYOK",
+            "limit": 100
           },
           {
-            "answer": "GORES"
+            "answer": "GORES",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 80,
@@ -276,13 +327,16 @@
         "key": "KACA_PINTU_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 90,
@@ -293,13 +347,16 @@
         "key": "HANDLE_PINTU_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 85,
@@ -314,13 +371,16 @@
         "key": "KACA_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 100,
@@ -331,13 +391,16 @@
         "key": "LIST_KACA_DEPAN_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 110,
@@ -348,13 +411,16 @@
         "key": "TIANG_B_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 120,
@@ -369,13 +435,16 @@
         "key": "KACA_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 500,
@@ -386,13 +455,16 @@
         "key": "LIST_KACA_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 510,
@@ -403,13 +475,16 @@
         "key": "TIANG_B_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 520,
@@ -424,13 +499,16 @@
         "key": "PINTU_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 530,
@@ -441,13 +519,16 @@
         "key": "KACA_PINTU_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 540,
@@ -458,13 +539,16 @@
         "key": "HANDLE_PINTU_DEPAN_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 535,
@@ -479,13 +563,16 @@
         "key": "PINTU_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 100,
@@ -496,13 +583,16 @@
         "key": "KACA_PINTU_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 110,
@@ -513,13 +603,16 @@
         "key": "HANDLE_PINTU_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 105,
@@ -534,13 +627,16 @@
         "key": "PINTU_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 500,
@@ -551,13 +647,16 @@
         "key": "KACA_PINTU_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 510,
@@ -568,13 +667,16 @@
         "key": "HANDLE_PINTU_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 505,
@@ -589,13 +691,16 @@
         "key": "KACA_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 100,
@@ -606,13 +711,16 @@
         "key": "LIST_KACA_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 110,
@@ -623,13 +731,16 @@
         "key": "TIANG_C_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 120,
@@ -644,13 +755,16 @@
         "key": "KACA_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 500,
@@ -661,13 +775,16 @@
         "key": "LIST_KACA_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 510,
@@ -678,13 +795,16 @@
         "key": "TIANG_C_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 520,
@@ -699,13 +819,16 @@
         "key": "BAN_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 80,
@@ -716,13 +839,16 @@
         "key": "LIS_BODI_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 90,
@@ -733,13 +859,16 @@
         "key": "LAMPU_SEN_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 100,
@@ -754,13 +883,16 @@
         "key": "BUMPER_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 150,
@@ -771,13 +903,16 @@
         "key": "KAP_BAGASI_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 160,
@@ -788,13 +923,16 @@
         "key": "LAMPU_REM_BELAKANG_KIRI",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 170,
@@ -809,13 +947,16 @@
         "key": "BUMPER_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 450,
@@ -826,13 +967,16 @@
         "key": "KAP_BAGASI_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 460,
@@ -843,13 +987,16 @@
         "key": "LAMPU_REM_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 470,
@@ -864,13 +1011,16 @@
         "key": "BAN_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 550,
@@ -881,13 +1031,16 @@
         "key": "LIS_BODI_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 530,
@@ -898,13 +1051,16 @@
         "key": "LAMPU_SEN_BELAKANG_KANAN",
         "answers": [
           {
-            "answer": "BAIK"
+            "answer": "BAIK",
+            "limit": 100
           },
           {
-            "answer": "PECAH"
+            "answer": "PECAH",
+            "limit": 100
           },
           {
-            "answer": "TIDAK ADA"
+            "answer": "TIDAK ADA",
+            "limit": 100
           }
         ],
         "x": 510,

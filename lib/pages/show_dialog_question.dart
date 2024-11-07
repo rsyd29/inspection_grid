@@ -52,7 +52,6 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   void initState() {
     super.initState();
     if (widget.item != null) {
-      // Set initial dropdown value
       setState(() {
         selectedValue = widget.item?['key'];
         keyObject = (widget.item != null)
@@ -64,21 +63,22 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
             : null;
 
         // Set initial selected damages
-        // Ensure item['values'] is a List or handle as needed
-        var valueList = widget.item?['values'];
-        if (valueList is String) {
-          selectedDamages = [valueList]; // Wrap single value in a list
-        } else if (valueList is List) {
-          selectedDamages = List<String>.from(valueList);
-        } else {
-          selectedDamages = [];
-        }
+        var valuesList = widget.item?['values'] ?? [];
+        selectedDamages = [
+          for (var item in valuesList)
+            if (item is Map<String, dynamic>) item['answer'] as String
+        ];
 
         for (var damage in selectedDamages) {
           final controller = getOrCreateController(damage);
-          // Add initial images from the item
-          final imagePaths =
-              (widget.item?['image'] as List<dynamic>? ?? []).cast<String>();
+          final imagePaths = [
+            for (var value in valuesList)
+              if (value is Map<String, dynamic> && value['answer'] == damage)
+                ...(value['image'] is String
+                    ? [value['image']]
+                    : value['image'] as List<String>? ?? [])
+          ];
+
           for (var path in imagePaths) {
             final fileName = path.split('/').last;
             final fileExtension = fileName.split('.').last;
@@ -87,7 +87,6 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
               [
                 ImageFile(
                   path.hashCode.toString(),
-                  // Use the hash code of the path as a unique identifier
                   name: fileName,
                   extension: fileExtension,
                   path: path,
@@ -310,14 +309,14 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                       ?.cast<Map<String, dynamic>>() ??
                                   [];
 
+                          // Inside ElevatedButton onPressed:
                           for (var damage in selectedDamages) {
                             Map<String, dynamic> damageEntry = {
                               'answer': damage,
                               'image': damageImagesControllers[damage]
-                                      ?.images
-                                      .firstOrNull
-                                      ?.path ??
-                                  '',
+                                  ?.images
+                                  .firstOrNull
+                                  ?.path,
                             };
 
                             var entryIndex = existingEntries.indexWhere(
@@ -325,9 +324,26 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                             );
 
                             if (entryIndex != -1) {
-                              // Append to existing value list
-                              existingEntries[entryIndex]['values']
-                                  .add(damageEntry);
+                              // Update existing entry
+                              var valuesList = (existingEntries[entryIndex]
+                                      ['values'] as List)
+                                  .map((item) => item as Map<String, dynamic>)
+                                  .toList();
+                              var existingDamageIndex = valuesList.indexWhere(
+                                (item) => item['answer'] == damage,
+                              );
+
+                              if (existingDamageIndex != -1) {
+                                // Update image for existing damage
+                                valuesList[existingDamageIndex]['image'] =
+                                    damageEntry['image'];
+                              } else {
+                                // Add new damageEntry if it doesn't exist
+                                valuesList.add(damageEntry);
+                              }
+
+                              existingEntries[entryIndex]['values'] =
+                                  valuesList;
                             } else {
                               // Add new entry if key is not found
                               existingEntries.add({
@@ -345,7 +361,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                           Map<String, dynamic> dataMergedObject =
                               mergeObjects(dataCache, {});
 
-                          Navigator.pop(context, dataMergedObject);
+                          Navigator.pop(context);
 
                           SecureStorageService sss = SecureStorageServiceImpl(
                             flutterSecureStorage: FlutterSecureStorage(),

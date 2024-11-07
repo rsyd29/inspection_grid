@@ -39,36 +39,87 @@ class CarouselDialogContent extends StatelessWidget {
               enlargeCenterPage: false,
               autoPlay: true,
             ),
+            // ... existing code ...
+
             items: items.asMap().entries.map((entry) {
               final index = entry.key;
               final item = entry.value;
-              final imageWidgets = item['images'].map<Widget>((imagePath) {
-                return GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FullScreenImageView(
-                        imagePaths: item['images'].cast<String>(),
-                        initialPage: item['images'].indexOf(imagePath),
-                        keyText: item['key'],
-                        valueText: item['value'],
+
+              // Update to handle `value` list
+              final valueWidgets = item['value'].map<Widget>((valueItem) {
+                final imageWidgets =
+                    valueItem['images'].map<Widget>((imagePath) {
+                  return GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImageView(
+                          imagePaths: valueItem['images'].cast<String>(),
+                          initialPage: valueItem['images'].indexOf(imagePath),
+                          keyText: item['key'],
+                          valueText: valueItem['answer'], // Updated field
+                        ),
                       ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.file(
-                        File(imagePath),
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(child: Text("Image not found"));
-                        },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.file(
+                          File(imagePath),
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(child: Text("Image not found"));
+                          },
+                        ),
                       ),
                     ),
-                  ),
+                  );
+                }).toList();
+
+                return Column(
+                  children: [
+                    // Images for each value item
+                    Expanded(
+                      child: CarouselSlider(
+                        items: imageWidgets,
+                        options: CarouselOptions(
+                          height: 100.0,
+                          enableInfiniteScroll: true,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          aspectRatio: 16 / 9,
+                          viewportFraction: 0.8,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 4.0,
+                        right: 4.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${index + 1}\n${item['key']}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "${valueItem['answer']}", // Show the answer
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               }).toList();
 
@@ -79,48 +130,16 @@ class CarouselDialogContent extends StatelessWidget {
                 elevation: 4,
                 child: Column(
                   children: [
-                    // Display each image prominently
+                    // Combine all images with answers into a carousel
                     Expanded(
                       child: CarouselSlider(
-                        items: imageWidgets,
+                        items: valueWidgets,
                         options: CarouselOptions(
-                          height: 100.0, // Adjusted height
+                          height: 200.0,
                           enableInfiniteScroll: true,
-                          enlargeCenterPage:
-                              true, // Enlarge the center page for emphasis
+                          enlargeCenterPage: false,
                           autoPlay: true,
-                          aspectRatio:
-                              16 / 9, // Added aspect ratio for consistency
-                          viewportFraction:
-                              0.8, // Added viewport fraction for better spacing
                         ),
-                      ),
-                    ),
-
-                    // Ensure the key and value have distinct style
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 4.0,
-                        right: 4.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${index + 1}\n${item['key']}", // Added index here
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "${item['value']}",
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ],
                       ),
                     ),
                     Row(
@@ -146,6 +165,8 @@ class CarouselDialogContent extends StatelessWidget {
                 ),
               );
             }).toList(),
+
+// ... existing code ...
           ),
           SizedBox(height: 16),
           SizedBox(

@@ -64,8 +64,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
             : null;
 
         // Set initial selected damages
-        // Ensure item['value'] is a List or handle as needed
-        var valueList = widget.item?['value'];
+        // Ensure item['values'] is a List or handle as needed
+        var valueList = widget.item?['values'];
         if (valueList is String) {
           selectedDamages = [valueList]; // Wrap single value in a list
         } else if (valueList is List) {
@@ -78,20 +78,22 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
           final controller = getOrCreateController(damage);
           // Add initial images from the item
           final imagePaths =
-              (widget.item?['images'] as List<dynamic>? ?? []).cast<String>();
+              (widget.item?['image'] as List<dynamic>? ?? []).cast<String>();
           for (var path in imagePaths) {
             final fileName = path.split('/').last;
             final fileExtension = fileName.split('.').last;
 
-            controller.updateImages([
-              ImageFile(
-                path.hashCode.toString(),
-                // Use the hash code of the path as a unique identifier
-                name: fileName,
-                extension: fileExtension,
-                path: path,
-              ),
-            ]);
+            controller.updateImages(
+              [
+                ImageFile(
+                  path.hashCode.toString(),
+                  // Use the hash code of the path as a unique identifier
+                  name: fileName,
+                  extension: fileExtension,
+                  path: path,
+                ),
+              ],
+            );
           }
         }
       });
@@ -311,11 +313,11 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                           for (var damage in selectedDamages) {
                             Map<String, dynamic> damageEntry = {
                               'answer': damage,
-                              'images': damageImagesControllers[damage]
+                              'image': damageImagesControllers[damage]
                                       ?.images
-                                      .map((e) => e.path)
-                                      .toList() ??
-                                  [],
+                                      .firstOrNull
+                                      ?.path ??
+                                  '',
                             };
 
                             var entryIndex = existingEntries.indexWhere(
@@ -324,13 +326,13 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
 
                             if (entryIndex != -1) {
                               // Append to existing value list
-                              existingEntries[entryIndex]['value']
+                              existingEntries[entryIndex]['values']
                                   .add(damageEntry);
                             } else {
                               // Add new entry if key is not found
                               existingEntries.add({
                                 'key': keyObject?['key'],
-                                'value': [damageEntry],
+                                'values': [damageEntry],
                                 'x': keyObject?['x'],
                                 'y': keyObject?['y'],
                               });

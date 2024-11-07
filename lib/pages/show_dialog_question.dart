@@ -212,6 +212,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                           (element) => element['key'] == value,
                           orElse: () => {'key': value}, // Added fallback
                         );
+                        selectedDamages.clear();
                       });
                     },
                   ),

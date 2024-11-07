@@ -175,7 +175,7 @@ class CarouselDialogContent extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item['key'].toString().replaceAll('_', ' '),
+                              '${index + 1}. ${item['key'].toString().replaceAll('_', ' ')}',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,

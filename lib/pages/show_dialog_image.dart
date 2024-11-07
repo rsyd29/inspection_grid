@@ -274,10 +274,24 @@ class CarouselDialogContent extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                        Colors.blueAccent), // Updated button style
+                    padding: WidgetStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(vertical: 12.0)),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0))),
+                  ),
                   onPressed: () {
                     onAdd();
                   },
-                  child: Text('Tambah Inspeksi Komponen'),
+                  child: Text(
+                    'Tambah Inspeksi Komponen',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],

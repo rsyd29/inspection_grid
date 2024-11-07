@@ -130,29 +130,39 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
       future: getJson(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator(); // Tampilkan loading jika ukuran gambar belum didapat
+          return Center(
+            child: CircularProgressIndicator(), // Centered loading indicator
+          );
         }
         final data = snapshot.data?['${widget.index}'];
 
-        if (data == null) return Text('No Data Available');
+        if (data == null) {
+          return Text(
+            'No Data Available',
+            style: TextStyle(color: Colors.black),
+          ); // Styled text
+        }
         return Material(
+          color: Colors.grey[100], // Background color
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Pertanyaan Component'.toUpperCase()),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      'Pertanyaan Component'.toUpperCase(),
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                   DropdownButtonFormField(
                     value: selectedValue,
                     isExpanded: true,
-                    style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      color: Colors.black,
-                    ),
+                    style:
+                        TextStyle(color: Colors.black), // Improved typography
                     decoration: InputDecoration(
                       helperText: 'Silahkan pilih component terlebih dahulu.',
                     ),
@@ -178,204 +188,231 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                   Visibility(
                     visible: keyObject != null,
                     child: Column(
-                      children: ((data['listComponent'] as List)
-                                  .where(
-                                    (element) =>
-                                        element['key'] == keyObject?['key'],
-                                  )
-                                  .toList()
-                                  .firstOrNull?['answers'] ??
-                              [])
-                          .where((e) => e['answer'] != 'BAIK')
-                          .map<Widget>(
-                            (e) => CheckboxListTile(
-                              title: Text(e['answer']),
-                              value: selectedDamages.contains(e['answer']),
-                              onChanged: (checked) {
-                                setState(() {
-                                  if (checked == true) {
-                                    selectedDamages.add(e['answer']);
-                                    damageImagesControllers[e['answer']] =
-                                        getOrCreateController(e['answer']);
-                                  } else {
-                                    selectedDamages.remove(e['answer']);
-                                    damageImagesControllers.remove(e['answer']);
-                                  }
-                                });
-                              },
-                            ),
-                          )
-                          .toList(),
+                      children: [
+                        Divider(),
+                        ...((data['listComponent'] as List)
+                                    .where(
+                                      (element) =>
+                                          element['key'] == keyObject?['key'],
+                                    )
+                                    .toList()
+                                    .firstOrNull?['answers'] ??
+                                [])
+                            .where((e) => e['answer'] != 'BAIK')
+                            .map<Widget>(
+                              (e) => CheckboxListTile(
+                                title: Text(e['answer']),
+                                value: selectedDamages.contains(e['answer']),
+                                onChanged: (checked) {
+                                  setState(() {
+                                    if (checked == true) {
+                                      selectedDamages.add(e['answer']);
+                                      damageImagesControllers[e['answer']] =
+                                          getOrCreateController(e['answer']);
+                                    } else {
+                                      selectedDamages.remove(e['answer']);
+                                      damageImagesControllers
+                                          .remove(e['answer']);
+                                    }
+                                  });
+                                },
+                              ),
+                            )
+                      ],
                     ),
                   ),
                   Visibility(
                     visible: selectedDamages.isNotEmpty,
                     child: Column(
-                      children: selectedDamages
-                          .map(
-                            (damage) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Images for damage: $damage'),
-                                SizedBox(
-                                    width: double.infinity,
-                                    height: height * 0.2,
-                                    child: MultiImagePickerView(
-                                      controller: getOrCreateController(damage),
-                                      draggable: true,
-                                      longPressDelayMilliseconds: 250,
-                                      onDragBoxDecoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .shadow
-                                                .withOpacity(0.5),
-                                            blurRadius: 5,
+                      children: [
+                        Divider(),
+                        ...selectedDamages.map(
+                          (damage) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Images for damage: $damage'),
+                              SizedBox(
+                                  width: double.infinity,
+                                  height: height * 0.2,
+                                  child: MultiImagePickerView(
+                                    controller: getOrCreateController(damage),
+                                    draggable: true,
+                                    longPressDelayMilliseconds: 250,
+                                    onDragBoxDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .shadow
+                                              .withOpacity(0.5),
+                                          blurRadius: 5,
+                                        ),
+                                      ],
+                                    ),
+                                    shrinkWrap: false,
+                                    padding: const EdgeInsets.all(0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 170,
+                                      childAspectRatio: 0.8,
+                                      crossAxisSpacing: 2,
+                                      mainAxisSpacing: 2,
+                                    ),
+                                    builder: (context, imageFile) {
+                                      return Stack(children: [
+                                        Positioned.fill(
+                                          child: ImageFileView(
+                                            imageFile: imageFile,
                                           ),
-                                        ],
-                                      ),
-                                      shrinkWrap: false,
-                                      padding: const EdgeInsets.all(0),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 170,
-                                        childAspectRatio: 0.8,
-                                        crossAxisSpacing: 2,
-                                        mainAxisSpacing: 2,
-                                      ),
-                                      builder: (context, imageFile) {
-                                        return Stack(children: [
-                                          Positioned.fill(
-                                            child: ImageFileView(
-                                              imageFile: imageFile,
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 4,
-                                            right: 4,
-                                            child: DraggableItemInkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              onPressed: () =>
-                                                  getOrCreateController(damage)
-                                                      .removeImage(imageFile),
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(5),
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary
-                                                      .withOpacity(0.4),
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Icon(
-                                                  Icons.delete_forever_rounded,
-                                                  size: 18,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .surface,
-                                                ),
+                                        ),
+                                        Positioned(
+                                          top: 4,
+                                          right: 4,
+                                          child: DraggableItemInkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            onPressed: () =>
+                                                getOrCreateController(damage)
+                                                    .removeImage(imageFile),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                                    .withOpacity(0.4),
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Icon(
+                                                Icons.delete_forever_rounded,
+                                                size: 18,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
                                               ),
                                             ),
-                                          )
-                                        ]);
-                                      },
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          )
-                          .toList(),
+                                          ),
+                                        )
+                                      ]);
+                                    },
+                                  )),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ),
                   Visibility(
                     visible: damageImagesControllers.isNotEmpty,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> dataCache = widget.cache == null
-                              ? {}
-                              : jsonDecode(widget.cache!);
+                    child: Column(
+                      children: [
+                        Divider(),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                  Colors.blueAccent), // Updated button style
+                              padding: WidgetStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.symmetric(vertical: 12.0)),
+                              shape: WidgetStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0))),
+                            ),
+                            onPressed: () async {
+                              Map<String, dynamic> dataCache =
+                                  widget.cache == null
+                                      ? {}
+                                      : jsonDecode(widget.cache!);
 
-                          // Extract existing data for the current index, if any
-                          List<Map<String, dynamic>> existingEntries =
-                              (dataCache['${widget.index}'] as List<dynamic>?)
-                                      ?.cast<Map<String, dynamic>>() ??
-                                  [];
+                              // Extract existing data for the current index, if any
+                              List<Map<String, dynamic>> existingEntries =
+                                  (dataCache['${widget.index}']
+                                              as List<dynamic>?)
+                                          ?.cast<Map<String, dynamic>>() ??
+                                      [];
 
-                          // Inside ElevatedButton onPressed:
-                          for (var damage in selectedDamages) {
-                            Map<String, dynamic> damageEntry = {
-                              'answer': damage,
-                              'image': damageImagesControllers[damage]
-                                  ?.images
-                                  .firstOrNull
-                                  ?.path,
-                            };
+                              // Inside ElevatedButton onPressed:
+                              for (var damage in selectedDamages) {
+                                Map<String, dynamic> damageEntry = {
+                                  'answer': damage,
+                                  'image': damageImagesControllers[damage]
+                                      ?.images
+                                      .firstOrNull
+                                      ?.path,
+                                };
 
-                            var entryIndex = existingEntries.indexWhere(
-                              (entry) => entry['key'] == keyObject?['key'],
-                            );
+                                var entryIndex = existingEntries.indexWhere(
+                                  (entry) => entry['key'] == keyObject?['key'],
+                                );
 
-                            if (entryIndex != -1) {
-                              // Update existing entry
-                              var valuesList = (existingEntries[entryIndex]
-                                      ['values'] as List)
-                                  .map((item) => item as Map<String, dynamic>)
-                                  .toList();
-                              var existingDamageIndex = valuesList.indexWhere(
-                                (item) => item['answer'] == damage,
-                              );
+                                if (entryIndex != -1) {
+                                  // Update existing entry
+                                  var valuesList = (existingEntries[entryIndex]
+                                          ['values'] as List)
+                                      .map((item) =>
+                                          item as Map<String, dynamic>)
+                                      .toList();
+                                  var existingDamageIndex =
+                                      valuesList.indexWhere(
+                                    (item) => item['answer'] == damage,
+                                  );
 
-                              if (existingDamageIndex != -1) {
-                                // Update image for existing damage
-                                valuesList[existingDamageIndex]['image'] =
-                                    damageEntry['image'];
-                              } else {
-                                // Add new damageEntry if it doesn't exist
-                                valuesList.add(damageEntry);
+                                  if (existingDamageIndex != -1) {
+                                    // Update image for existing damage
+                                    valuesList[existingDamageIndex]['image'] =
+                                        damageEntry['image'];
+                                  } else {
+                                    // Add new damageEntry if it doesn't exist
+                                    valuesList.add(damageEntry);
+                                  }
+
+                                  existingEntries[entryIndex]['values'] =
+                                      valuesList;
+                                } else {
+                                  // Add new entry if key is not found
+                                  existingEntries.add({
+                                    'key': keyObject?['key'],
+                                    'values': [damageEntry],
+                                    'x': keyObject?['x'],
+                                    'y': keyObject?['y'],
+                                  });
+                                }
                               }
 
-                              existingEntries[entryIndex]['values'] =
-                                  valuesList;
-                            } else {
-                              // Add new entry if key is not found
-                              existingEntries.add({
-                                'key': keyObject?['key'],
-                                'values': [damageEntry],
-                                'x': keyObject?['x'],
-                                'y': keyObject?['y'],
-                              });
-                            }
-                          }
+                              // Save updated entries back to dataCache
+                              dataCache['${widget.index}'] = existingEntries;
 
-                          // Save updated entries back to dataCache
-                          dataCache['${widget.index}'] = existingEntries;
+                              Map<String, dynamic> dataMergedObject =
+                                  mergeObjects(dataCache, {});
 
-                          Map<String, dynamic> dataMergedObject =
-                              mergeObjects(dataCache, {});
+                              Navigator.pop(context);
 
-                          Navigator.pop(context);
+                              SecureStorageService sss =
+                                  SecureStorageServiceImpl(
+                                flutterSecureStorage: FlutterSecureStorage(),
+                              );
 
-                          SecureStorageService sss = SecureStorageServiceImpl(
-                            flutterSecureStorage: FlutterSecureStorage(),
-                          );
+                              final cacheKey = await sss.cacheKeyWithValue(
+                                key: 'task',
+                                value: jsonEncode(dataMergedObject),
+                              );
 
-                          final cacheKey = await sss.cacheKeyWithValue(
-                            key: 'task',
-                            value: jsonEncode(dataMergedObject),
-                          );
-
-                          print('data: $dataMergedObject');
-                        },
-                        child: Text('Simpan'),
-                      ),
+                              print('data: $dataMergedObject');
+                            },
+                            child: Text(
+                              'Simpan',
+                              style: TextStyle(color: Colors.white),
+                            ), // Updated button text style
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ],

@@ -52,6 +52,7 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: CarouselDialogContent(
+            cache: cache,
             gridIndex: gridIndex,
             items: items,
             onDelete: (p0) async {
@@ -94,6 +95,17 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
                 ),
               );
 
+              setState(() {});
+            },
+            onAdd: () async {
+              Navigator.of(context).pop();
+              await showDialog(
+                context: context,
+                builder: (context) => ShowDialogQuestion(
+                  index: gridIndex,
+                  cache: cache,
+                ),
+              );
               setState(() {});
             },
           ),
@@ -174,36 +186,36 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
                           itemCount: itemCount,
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) => ShowDialogQuestion(
-                                    index: index,
-                                    cache: cache,
-                                  ),
-                                );
-                                setState(() {});
-                              },
-                              onLongPress:
-                                  (objectData?.keys.contains('$index') ?? false)
-                                      ? () {
-                                          List<Map<String, dynamic>> data =
-                                              (objectData?['$index'] as List)
-                                                  .map<Map<String, dynamic>>(
-                                                    (e) => e
-                                                        as Map<String, dynamic>,
-                                                  )
-                                                  .toList();
-                                          final items = data;
-                                          showCarouselDialog(
-                                            context,
-                                            '$index',
-                                            items,
-                                            cache,
-                                            index,
-                                          );
-                                        }
-                                      : null,
+                              onTap: (objectData?.keys.contains('$index') ??
+                                      false)
+                                  ? () {
+                                      List<Map<String, dynamic>> data =
+                                          (objectData?['$index'] as List)
+                                              .map<Map<String, dynamic>>(
+                                                (e) =>
+                                                    e as Map<String, dynamic>,
+                                              )
+                                              .toList();
+                                      final items = data;
+                                      showCarouselDialog(
+                                        context,
+                                        '$index',
+                                        items,
+                                        cache,
+                                        index,
+                                      );
+                                    }
+                                  : () async {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            ShowDialogQuestion(
+                                          index: index,
+                                          cache: cache,
+                                        ),
+                                      );
+                                      setState(() {});
+                                    },
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(

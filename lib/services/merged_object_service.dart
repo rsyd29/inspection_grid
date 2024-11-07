@@ -11,13 +11,8 @@ Map<String, List<Map<String, dynamic>>> mergeObjects(
 
   // Menggabungkan entry dari obj2
   obj2?.forEach((key, value) {
-    if (merged.containsKey(key)) {
-      // Jika key sudah ada, tambahkan semua item dari list obj2 ke list di merged
-      merged[key]!.addAll(value);
-    } else {
-      // Jika key belum ada, tambahkan key-value dari obj2 langsung ke merged
-      merged[key] = List.from(value);
-    }
+    // Update the value when keys are the same
+    merged[key] = List.from(value);
   });
 
   return merged;

@@ -85,7 +85,7 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
             },
             onEdit: (index, item) async {
               Navigator.of(context).pop();
-              await showDialog(
+              final updatedItem = await showDialog<Map<String, dynamic>>(
                 context: context,
                 builder: (context) => ShowDialogQuestion(
                   index: index,
@@ -93,7 +93,24 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
                   item: item,
                 ),
               );
-              setState(() {});
+
+              if (updatedItem != null) {
+                // Update only the answer and images in your cached items
+                setState(() {
+                  items[index]['answer'] = updatedItem['answer'];
+                  items[index]['images'] = updatedItem['images'];
+                });
+
+                // Saving updated items back to secure storage
+                Map<String, dynamic>? dataCache =
+                    cache == null ? {} : jsonDecode(cache);
+                dataCache?[key] = items;
+
+                final cacheKey = await sss.cacheKeyWithValue(
+                  key: 'task',
+                  value: jsonEncode(dataCache),
+                );
+              }
             },
           ),
         );

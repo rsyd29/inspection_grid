@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:inspection_grid/services/merged_object_service.dart';
 import 'package:inspection_grid/services/pick_image_service.dart';
-import 'package:inspection_grid/services/secure_storage_service.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 import '../generated/assets.dart';
+import '../services/merged_object_service.dart';
+import '../services/secure_storage_service.dart';
 
 class ShowDialogQuestion extends StatefulWidget {
   final int index;
@@ -292,7 +292,6 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                           .toList(),
                     ),
                   ),
-                  // ... existing code ...
                   Visibility(
                     visible: damageImagesControllers.isNotEmpty,
                     child: SizedBox(
@@ -309,50 +308,29 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                       ?.cast<Map<String, dynamic>>() ??
                                   [];
 
-                          if (widget.item != null) {
-                            // Updating existing data
-                            for (var damage in selectedDamages) {
-                              var entryIndex = existingEntries.indexWhere(
-                                  (entry) => entry['value'] == damage);
+                          for (var damage in selectedDamages) {
+                            Map<String, dynamic> damageEntry = {
+                              'answer': damage,
+                              'images': damageImagesControllers[damage]
+                                      ?.images
+                                      .map((e) => e.path)
+                                      .toList() ??
+                                  [],
+                            };
 
-                              if (entryIndex != -1) {
-                                // Update existing entry
-                                existingEntries[entryIndex] = {
-                                  ...existingEntries[entryIndex],
-                                  'images': damageImagesControllers[damage]
-                                          ?.images
-                                          .map((e) => e.path)
-                                          .toList() ??
-                                      [],
-                                  'x': keyObject?['x'],
-                                  'y': keyObject?['y'],
-                                };
-                              } else {
-                                // Add new entry if not found
-                                existingEntries.add({
-                                  'key': keyObject?['key'],
-                                  'value': damage,
-                                  'images': damageImagesControllers[damage]
-                                          ?.images
-                                          .map((e) => e.path)
-                                          .toList() ??
-                                      [],
-                                  'x': keyObject?['x'],
-                                  'y': keyObject?['y'],
-                                });
-                              }
-                            }
-                          } else {
-                            // Adding new data
-                            for (var damage in selectedDamages) {
+                            var entryIndex = existingEntries.indexWhere(
+                              (entry) => entry['key'] == keyObject?['key'],
+                            );
+
+                            if (entryIndex != -1) {
+                              // Append to existing value list
+                              existingEntries[entryIndex]['value']
+                                  .add(damageEntry);
+                            } else {
+                              // Add new entry if key is not found
                               existingEntries.add({
                                 'key': keyObject?['key'],
-                                'value': damage,
-                                'images': damageImagesControllers[damage]
-                                        ?.images
-                                        .map((e) => e.path)
-                                        .toList() ??
-                                    [],
+                                'value': [damageEntry],
                                 'x': keyObject?['x'],
                                 'y': keyObject?['y'],
                               });
@@ -362,7 +340,6 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                           // Save updated entries back to dataCache
                           dataCache['${widget.index}'] = existingEntries;
 
-                          // Merge updated dataCache with any additional items in dataMergedObject
                           Map<String, dynamic> dataMergedObject =
                               mergeObjects(dataCache, {});
 
@@ -382,8 +359,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                         child: Text('Simpan'),
                       ),
                     ),
-                  ),
-// ... existing code ...
+                  )
                 ],
               ),
             ),

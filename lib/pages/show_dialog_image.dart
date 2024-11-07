@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -39,6 +38,7 @@ class CarouselDialogContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 16),
+              /*
               CarouselSlider(
                 options: CarouselOptions(
                   height: 300.0,
@@ -156,6 +156,120 @@ class CarouselDialogContent extends StatelessWidget {
                   );
                 }).toList(),
               ),
+               */
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 4,
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item['key'],
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: item['values'].map<Widget>((valueItem) {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  elevation: 3,
+                                  margin: EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                FullScreenImageView(
+                                              imagePaths: [valueItem['image']],
+                                              initialPage: 0,
+                                              keyText: item['key'],
+                                              valueText: valueItem['answer'],
+                                            ),
+                                          ),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                          child: Image.file(
+                                            File(valueItem['image']),
+                                            height: 150.0,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Center(
+                                                  child:
+                                                      Text("Image not found"));
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 12.0),
+                                        child: Center(
+                                          child: Text(
+                                            valueItem['answer'],
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontStyle: FontStyle.italic),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    onEdit(gridIndex, item);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    onDelete(index);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
@@ -249,7 +363,8 @@ class _FullScreenImageViewState extends State<FullScreenImageView> {
               bottom: 20,
               right: 20,
               child: Text(
-                '${_currentPage + 1} / ${widget.imagePaths.length}', // Display dynamic currentPage
+                '${_currentPage + 1} / ${widget.imagePaths.length}',
+                // Display dynamic currentPage
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),

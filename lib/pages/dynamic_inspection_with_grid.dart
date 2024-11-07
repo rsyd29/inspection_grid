@@ -83,13 +83,14 @@ class _DynamicInspectionWithGridState extends State<DynamicInspectionWithGrid> {
                 value: jsonEncode(dataCache),
               );
             },
-            onEdit: (index) async {
+            onEdit: (index, item) async {
               Navigator.of(context).pop();
               await showDialog(
                 context: context,
                 builder: (context) => ShowDialogQuestion(
                   index: index,
                   cache: cache,
+                  item: item,
                 ),
               );
               setState(() {});

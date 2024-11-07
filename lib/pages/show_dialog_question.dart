@@ -12,11 +12,13 @@ import '../generated/assets.dart';
 class ShowDialogQuestion extends StatefulWidget {
   final int index;
   final String? cache;
+  final Map<String, dynamic>? item;
 
   const ShowDialogQuestion({
     super.key,
     required this.index,
     required this.cache,
+    this.item,
   });
 
   @override
@@ -49,6 +51,51 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   @override
   void initState() {
     super.initState();
+    if (widget.item != null) {
+      // Set initial dropdown value
+      setState(() {
+        selectedValue = widget.item?['key'];
+        keyObject = (widget.item != null)
+            ? {
+                'key': widget.item?['key'],
+                'x': widget.item?['x'],
+                'y': widget.item?['y'],
+              }
+            : null;
+
+        // Set initial selected damages
+        // Ensure item['value'] is a List or handle as needed
+        var valueList = widget.item?['value'];
+        if (valueList is String) {
+          selectedDamages = [valueList]; // Wrap single value in a list
+        } else if (valueList is List) {
+          selectedDamages = List<String>.from(valueList);
+        } else {
+          selectedDamages = [];
+        }
+
+        for (var damage in selectedDamages) {
+          final controller = getOrCreateController(damage);
+          // Add initial images from the item
+          final imagePaths =
+              (widget.item?['images'] as List<dynamic>? ?? []).cast<String>();
+          for (var path in imagePaths) {
+            final fileName = path.split('/').last;
+            final fileExtension = fileName.split('.').last;
+
+            controller.updateImages([
+              ImageFile(
+                path.hashCode.toString(),
+                // Use the hash code of the path as a unique identifier
+                name: fileName,
+                extension: fileExtension,
+                path: path,
+              ),
+            ]);
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -60,7 +107,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   }
 
   // Use the damage as a key to access the respective controller
-  MultiImagePickerController _getOrCreateController(String damage) {
+  MultiImagePickerController getOrCreateController(String damage) {
     if (!damageImagesControllers.containsKey(damage)) {
       damageImagesControllers[damage] = MultiImagePickerController(
         picker: (allowMultiple) async {
@@ -77,8 +124,9 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+
     return FutureBuilder(
-      future: _getJson(),
+      future: getJson(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return CircularProgressIndicator(); // Tampilkan loading jika ukuran gambar belum didapat
@@ -98,6 +146,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                     child: Text('Pertanyaan Component'.toUpperCase()),
                   ),
                   DropdownButtonFormField(
+                    value: selectedValue,
                     isExpanded: true,
                     style: TextStyle(
                       overflow: TextOverflow.ellipsis,
@@ -146,7 +195,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                   if (checked == true) {
                                     selectedDamages.add(e['answer']);
                                     damageImagesControllers[e['answer']] =
-                                        _getOrCreateController(e['answer']);
+                                        getOrCreateController(e['answer']);
                                   } else {
                                     selectedDamages.remove(e['answer']);
                                     damageImagesControllers.remove(e['answer']);
@@ -171,8 +220,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                     width: double.infinity,
                                     height: height * 0.2,
                                     child: MultiImagePickerView(
-                                      controller:
-                                          _getOrCreateController(damage),
+                                      controller: getOrCreateController(damage),
                                       draggable: true,
                                       longPressDelayMilliseconds: 250,
                                       onDragBoxDecoration: BoxDecoration(
@@ -210,7 +258,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                               borderRadius:
                                                   BorderRadius.circular(2),
                                               onPressed: () =>
-                                                  _getOrCreateController(damage)
+                                                  getOrCreateController(damage)
                                                       .removeImage(imageFile),
                                               child: Container(
                                                 padding:
@@ -244,18 +292,60 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                           .toList(),
                     ),
                   ),
+                  // ... existing code ...
                   Visibility(
                     visible: damageImagesControllers.isNotEmpty,
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
-                          Map<String, dynamic>? dataCache = widget.cache == null
+                          Map<String, dynamic> dataCache = widget.cache == null
                               ? {}
-                              : jsonDecode(widget.cache ?? '');
-                          Map<String, dynamic>? dataSaving = {
-                            '${widget.index}': selectedDamages.map((damage) {
-                              return {
+                              : jsonDecode(widget.cache!);
+
+                          // Extract existing data for the current index, if any
+                          List<Map<String, dynamic>> existingEntries =
+                              (dataCache['${widget.index}'] as List<dynamic>?)
+                                      ?.cast<Map<String, dynamic>>() ??
+                                  [];
+
+                          if (widget.item != null) {
+                            // Updating existing data
+                            for (var damage in selectedDamages) {
+                              var entryIndex = existingEntries.indexWhere(
+                                  (entry) => entry['value'] == damage);
+
+                              if (entryIndex != -1) {
+                                // Update existing entry
+                                existingEntries[entryIndex] = {
+                                  ...existingEntries[entryIndex],
+                                  'images': damageImagesControllers[damage]
+                                          ?.images
+                                          .map((e) => e.path)
+                                          .toList() ??
+                                      [],
+                                  'x': keyObject?['x'],
+                                  'y': keyObject?['y'],
+                                };
+                              } else {
+                                // Add new entry if not found
+                                existingEntries.add({
+                                  'key': keyObject?['key'],
+                                  'value': damage,
+                                  'images': damageImagesControllers[damage]
+                                          ?.images
+                                          .map((e) => e.path)
+                                          .toList() ??
+                                      [],
+                                  'x': keyObject?['x'],
+                                  'y': keyObject?['y'],
+                                });
+                              }
+                            }
+                          } else {
+                            // Adding new data
+                            for (var damage in selectedDamages) {
+                              existingEntries.add({
                                 'key': keyObject?['key'],
                                 'value': damage,
                                 'images': damageImagesControllers[damage]
@@ -265,12 +355,16 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                     [],
                                 'x': keyObject?['x'],
                                 'y': keyObject?['y'],
-                              };
-                            }).toList(),
-                          };
+                              });
+                            }
+                          }
 
-                          Map<String, dynamic>? dataMergedObject =
-                              mergeObjects(dataCache, dataSaving);
+                          // Save updated entries back to dataCache
+                          dataCache['${widget.index}'] = existingEntries;
+
+                          // Merge updated dataCache with any additional items in dataMergedObject
+                          Map<String, dynamic> dataMergedObject =
+                              mergeObjects(dataCache, {});
 
                           Navigator.pop(context, dataMergedObject);
 
@@ -283,12 +377,13 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                             value: jsonEncode(dataMergedObject),
                           );
 
-                          print('data: $data');
+                          print('data: $dataMergedObject');
                         },
                         child: Text('Simpan'),
                       ),
                     ),
                   ),
+// ... existing code ...
                 ],
               ),
             ),
@@ -298,7 +393,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
     );
   }
 
-  Future<Map<String, dynamic>> _getJson() async {
+  Future<Map<String, dynamic>> getJson() async {
     final result =
         await DefaultAssetBundle.of(context).loadString(Assets.jsonInspection);
     return jsonDecode(result);

@@ -17,7 +17,7 @@ class CarouselDialogContent extends StatelessWidget {
   final int gridIndex;
   final List<Map<String, dynamic>> items;
   final Function(int) onDelete;
-  final Function(int) onEdit;
+  final Function(int, Map<String, dynamic>) onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +129,7 @@ class CarouselDialogContent extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            onEdit(gridIndex);
+                            onEdit(gridIndex, item);
                           },
                           padding: EdgeInsets.zero,
                         ),

@@ -373,14 +373,12 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                       ? {}
                                       : jsonDecode(widget.cache!);
 
-                              // Extract existing data for the current index, if any
-                              List<Map<String, dynamic>> existingEntries =
+                              List<Map<String, dynamic>?> existingEntries =
                                   (dataCache['${widget.index}']
                                               as List<dynamic>?)
                                           ?.cast<Map<String, dynamic>>() ??
                                       [];
 
-                              // Inside ElevatedButton onPressed:
                               for (var damage in selectedDamages) {
                                 Map<String, dynamic> damageEntry = {
                                   'answer': damage.$1,
@@ -392,19 +390,18 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                 };
 
                                 var entryIndex = existingEntries.indexWhere(
-                                  (entry) => entry['key'] == keyObject?['key'],
+                                  (entry) => entry?['key'] == keyObject?['key'],
                                 );
 
                                 if (entryIndex != -1) {
-                                  // Update existing entry
                                   var valuesList = (existingEntries[entryIndex]
-                                          ['values'] as List)
+                                          ?['values'] as List)
                                       .map((item) =>
                                           item as Map<String, dynamic>)
                                       .toList();
                                   var existingDamageIndex =
                                       valuesList.indexWhere(
-                                    (item) => item['answer'] == damage,
+                                    (item) => item['answer'] == damage.$1,
                                   );
 
                                   if (existingDamageIndex != -1) {
@@ -416,10 +413,11 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                     valuesList.add(damageEntry);
                                   }
 
-                                  existingEntries[entryIndex]['values'] =
+                                  existingEntries[entryIndex]?['values'] =
                                       valuesList;
                                 } else {
-                                  // Add new entry if key is not found
+                                  // If key is not found, you can choose to handle this
+                                  // situation separately or keep the logic as needed.
                                   existingEntries.add({
                                     'key': keyObject?['key'],
                                     'values': [damageEntry],
@@ -429,7 +427,6 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                 }
                               }
 
-                              // Save updated entries back to dataCache
                               dataCache['${widget.index}'] = existingEntries;
 
                               Map<String, dynamic> dataMergedObject =

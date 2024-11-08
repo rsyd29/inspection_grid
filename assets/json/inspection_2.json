@@ -7,6 +7,8 @@
         {
           "componentId": 101,
           "componentName": "Bemper Depan",
+          "x": 150,
+          "y": 84,
           "damageOptions": [
             {
               "damageType": "Pecah",
@@ -21,6 +23,8 @@
         {
           "componentId": 102,
           "componentName": "Lampu Depan Kanan",
+          "x": 150,
+          "y": 100,
           "damageOptions": [
             {
               "damageType": "Retak",
@@ -35,6 +39,8 @@
         {
           "componentId": 103,
           "componentName": "Lampu Depan Kiri",
+          "x": 84,
+          "y": 100,
           "damageOptions": [
             {
               "damageType": "Retak",
@@ -56,6 +62,8 @@
         {
           "componentId": 201,
           "componentName": "Pintu Depan Kanan",
+          "x": 296,
+          "y": 295,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -70,6 +78,8 @@
         {
           "componentId": 202,
           "componentName": "Kaca Pintu Depan Kanan",
+          "x": 354,
+          "y": 210,
           "damageOptions": [
             {
               "damageType": "Retak",
@@ -85,8 +95,10 @@
       "partName": "Part 3",
       "components": [
         {
-          "componentId": 601,
-          "componentName": "Ban Belakang Kanan",
+          "componentId": 301,
+          "componentName": "Pintu Belakang Kanan",
+          "x": 354,
+          "y": 294,
           "damageOptions": [
             {
               "damageType": "Botak",
@@ -99,8 +111,10 @@
           ]
         },
         {
-          "componentId": 602,
-          "componentName": "Velg Belakang Kanan",
+          "componentId": 302,
+          "componentName": "Kaca Pintu Belakang Kanan",
+          "x": 296,
+          "y": 295,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -122,6 +136,8 @@
         {
           "componentId": 401,
           "componentName": "Ban Serep",
+          "x": 332,
+          "y": 494,
           "damageOptions": [
             {
               "damageType": "TIDAK BAIK",
@@ -147,6 +163,8 @@
         {
           "componentId": 501,
           "componentName": "Ban Depan Kanan",
+          "x": 349,
+          "y": 380,
           "damageOptions": [
             {
               "damageType": "Botak",
@@ -161,6 +179,8 @@
         {
           "componentId": 502,
           "componentName": "Velg Depan Kanan",
+          "x": 27,
+          "y": 0,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -180,8 +200,10 @@
       "partName": "Part 6",
       "components": [
         {
-          "componentId": 1101,
+          "componentId": 601,
           "componentName": "Spion Kanan",
+          "x": 299,
+          "y": 239,
           "damageOptions": [
             {
               "damageType": "Patah",
@@ -201,25 +223,33 @@
       "partName": "Part 7",
       "components": [
         {
-          "componentId": 301,
+          "componentId": 701,
           "componentName": "Pintu Belakang Kanan",
+          "x": 354,
+          "y": 294,
           "damageOptions": [
             {
-              "damageType": "Penyok",
+              "damageType": "Botak",
               "limit": 2
             },
             {
-              "damageType": "Baret",
+              "damageType": "Sobek",
               "limit": 3
             }
           ]
         },
         {
-          "componentId": 302,
+          "componentId": 702,
           "componentName": "Kaca Pintu Belakang Kanan",
+          "x": 296,
+          "y": 295,
           "damageOptions": [
             {
-              "damageType": "Retak",
+              "damageType": "Penyok",
+              "limit": 1
+            },
+            {
+              "damageType": "Baret",
               "limit": 2
             }
           ]
@@ -232,8 +262,10 @@
       "partName": "Part 8",
       "components": [
         {
-          "componentId": 1401,
+          "componentId": 801,
           "componentName": "Kap Mesin",
+          "x": 183,
+          "y": 109,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -255,6 +287,8 @@
         {
           "componentId": 901,
           "componentName": "Ban Depan Kiri",
+          "x": 68,
+          "y": 169,
           "damageOptions": [
             {
               "damageType": "Botak",
@@ -269,6 +303,8 @@
         {
           "componentId": 902,
           "componentName": "Velg Depan Kiri",
+          "x": 17,
+          "y": 0,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -288,8 +324,10 @@
       "partName": "Part 10",
       "components": [
         {
-          "componentId": 1201,
+          "componentId": 1001,
           "componentName": "Spion Kiri",
+          "x": 129,
+          "y": 238,
           "damageOptions": [
             {
               "damageType": "Patah",
@@ -309,8 +347,10 @@
       "partName": "Part 11",
       "components": [
         {
-          "componentId": 701,
+          "componentId": 1101,
           "componentName": "Pintu Belakang Kiri",
+          "x": 122,
+          "y": 368,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -323,8 +363,10 @@
           ]
         },
         {
-          "componentId": 702,
+          "componentId": 1102,
           "componentName": "Kaca Pintu Belakang Kiri",
+          "x": 94,
+          "y": 361,
           "damageOptions": [
             {
               "damageType": "Retak",
@@ -340,8 +382,10 @@
       "partName": "Part 12",
       "components": [
         {
-          "componentId": 1501,
+          "componentId": 1201,
           "componentName": "Bagasi Belakang",
+          "x": 83,
+          "y": 230,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -363,6 +407,8 @@
         {
           "componentId": 1301,
           "componentName": "Atap Mobil",
+          "x": 90,
+          "y": 200,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -382,8 +428,10 @@
       "partName": "Part 14",
       "components": [
         {
-          "componentId": 801,
+          "componentId": 1401,
           "componentName": "Pintu Depan Kiri",
+          "x": 119,
+          "y": 218,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -396,8 +444,10 @@
           ]
         },
         {
-          "componentId": 802,
+          "componentId": 1402,
           "componentName": "Kaca Pintu Depan Kiri",
+          "x": 89,
+          "y": 292,
           "damageOptions": [
             {
               "damageType": "Retak",
@@ -413,8 +463,10 @@
       "partName": "Part 15",
       "components": [
         {
-          "componentId": 1001,
+          "componentId": 1501,
           "componentName": "Ban Belakang Kiri",
+          "x": 68,
+          "y": 380,
           "damageOptions": [
             {
               "damageType": "Botak",
@@ -427,8 +479,10 @@
           ]
         },
         {
-          "componentId": 1002,
+          "componentId": 1502,
           "componentName": "Velg Belakang Kiri",
+          "x": 26,
+          "y": 0,
           "damageOptions": [
             {
               "damageType": "Penyok",
@@ -450,6 +504,8 @@
         {
           "componentId": 1601,
           "componentName": "Pintu Bensin",
+          "x": 68,
+          "y": 340,
           "damageOptions": [
             {
               "damageType": "Penyok",

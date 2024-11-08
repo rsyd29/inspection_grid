@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 import '../../services/pick_image_service.dart';
+import '../../services/secure_storage_service.dart';
 import '../full_screen_image_widget.dart';
 
 class QuestionDamagedComponentPage extends StatefulWidget {
@@ -26,6 +30,11 @@ class _QuestionDamagedComponentPageState
     setState(() {});
   }
 
+  // Instantiate SecureStorageService
+  final SecureStorageService secureStorageService = SecureStorageServiceImpl(
+    flutterSecureStorage: FlutterSecureStorage(),
+  );
+
   MultiImagePickerController getOrCreateController(
       Map<String, dynamic> damage) {
     if (!damageImagesControllers.containsKey(damage['damageType'])) {
@@ -48,8 +57,14 @@ class _QuestionDamagedComponentPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.part['partName'],
+        title: GestureDetector(
+          onTap: () async {
+            final data = await secureStorageService.getKey(key: 'thumbnail');
+            print(data);
+          },
+          child: Text(
+            widget.part['partName'],
+          ),
         ),
       ),
       body: ListView(
@@ -232,8 +247,60 @@ class _QuestionDamagedComponentPageState
     );
   }
 
-  void _saveDataToLocalStorage() {
-    // Implement your logic to save `selectedDamages` to local storage
-    // Example: print('Saving ${selectedDamages.length} damages to local storage...');
+  void _saveDataToLocalStorage() async {
+    try {
+      // Create the final data structure
+      Map<String, List<Map<String, dynamic>>> dataToSave = {};
+
+      for (var component in widget.part['components']) {
+        List<Map<String, dynamic>> damageData = [];
+
+        for (var damageOption in component['damageOptions']) {
+          if (selectedDamages.contains(damageOption)) {
+            List<String> damageImages =
+                damageImagesControllers[damageOption['damageType']]
+                        ?.images
+                        .map((img) => img.path!)
+                        .toList() ??
+                    [];
+
+            damageData.add({
+              'damageType': damageOption['damageType'],
+              'damageImages': damageImages,
+            });
+          }
+        }
+
+        if (damageData.isNotEmpty) {
+          dataToSave[component['componentId'].toString()] = [
+            {
+              'componentId': component['componentId'],
+              'componentName': component['componentName'],
+              'damages': damageData,
+              'x': component['x'],
+              'y': component['y'],
+            }
+          ];
+        }
+      }
+
+      // Convert to JSON string
+      String jsonData = jsonEncode(dataToSave);
+
+      // Save JSON data
+      bool isSuccess = await secureStorageService.cacheKeyWithValue(
+        key: 'thumbnail',
+        value: jsonData,
+      );
+
+      if (isSuccess) {
+        print('Data saved successfully');
+        Navigator.of(context).pop();
+      } else {
+        print('Failed to save data');
+      }
+    } catch (e) {
+      print('Error saving data: $e');
+    }
   }
 }

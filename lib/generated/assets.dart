@@ -20,4 +20,5 @@ class Assets {
   static const String imagesMobilPart32 = 'assets/images/mobil_part_3_2.png';
   static const String imagesMobilPart33 = 'assets/images/mobil_part_3_3.png';
   static const String jsonInspection = 'assets/json/inspection.json';
+  static const String jsonInspection2 = 'assets/json/inspection_2.json';
 }

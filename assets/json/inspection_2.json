@@ -1,0 +1,468 @@
+{
+  "parts": [
+    {
+      "partId": 1,
+      "partName": "Bemper Depan Kanan",
+      "components": [
+        {
+          "componentId": 101,
+          "componentName": "Bemper Depan",
+          "damageOptions": [
+            {
+              "damageType": "Pecah",
+              "limit": 3
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        },
+        {
+          "componentId": 102,
+          "componentName": "Lampu Depan Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Retak",
+              "limit": 3
+            },
+            {
+              "damageType": "Mati",
+              "limit": 1
+            }
+          ]
+        },
+        {
+          "componentId": 103,
+          "componentName": "Lampu Depan Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Retak",
+              "limit": 3
+            },
+            {
+              "damageType": "Mati",
+              "limit": 1
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_0_0.png"
+    },
+    {
+      "partId": 2,
+      "partName": "Body Samping Kanan Depan",
+      "components": [
+        {
+          "componentId": 201,
+          "componentName": "Pintu Depan Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 2
+            },
+            {
+              "damageType": "Baret",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "componentId": 202,
+          "componentName": "Kaca Pintu Depan Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Retak",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_0_1.png"
+    },
+    {
+      "partId": 3,
+      "partName": "Ban Belakang Kanan",
+      "components": [
+        {
+          "componentId": 601,
+          "componentName": "Ban Belakang Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Botak",
+              "limit": 2
+            },
+            {
+              "damageType": "Sobek",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "componentId": 602,
+          "componentName": "Velg Belakang Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 1
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_0_2.png"
+    },
+    {
+      "partId": 4,
+      "partName": "Ban Serep",
+      "components": [
+        {
+          "componentId": 401,
+          "componentName": "Ban Serep",
+          "damageOptions": [
+            {
+              "damageType": "TIDAK BAIK",
+              "limit": 1
+            },
+            {
+              "damageType": "ROBEK",
+              "limit": 3
+            },
+            {
+              "damageType": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_0_3.png"
+    },
+    {
+      "partId": 5,
+      "partName": "Ban Depan Kanan",
+      "components": [
+        {
+          "componentId": 501,
+          "componentName": "Ban Depan Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Botak",
+              "limit": 2
+            },
+            {
+              "damageType": "Sobek",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "componentId": 502,
+          "componentName": "Velg Depan Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 1
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_1_0.png"
+    },
+    {
+      "partId": 6,
+      "partName": "Spion Kanan",
+      "components": [
+        {
+          "componentId": 1101,
+          "componentName": "Spion Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Patah",
+              "limit": 1
+            },
+            {
+              "damageType": "Retak",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_1_1.png"
+    },
+    {
+      "partId": 7,
+      "partName": "Body Samping Kanan Belakang",
+      "components": [
+        {
+          "componentId": 301,
+          "componentName": "Pintu Belakang Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 2
+            },
+            {
+              "damageType": "Baret",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "componentId": 302,
+          "componentName": "Kaca Pintu Belakang Kanan",
+          "damageOptions": [
+            {
+              "damageType": "Retak",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_1_2.png"
+    },
+    {
+      "partId": 8,
+      "partName": "Kap Mesin",
+      "components": [
+        {
+          "componentId": 1401,
+          "componentName": "Kap Mesin",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 2
+            },
+            {
+              "damageType": "Baret",
+              "limit": 3
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_1_3.png"
+    },
+    {
+      "partId": 9,
+      "partName": "Ban Depan Kiri",
+      "components": [
+        {
+          "componentId": 901,
+          "componentName": "Ban Depan Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Botak",
+              "limit": 2
+            },
+            {
+              "damageType": "Sobek",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "componentId": 902,
+          "componentName": "Velg Depan Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 1
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_2_0.png"
+    },
+    {
+      "partId": 10,
+      "partName": "Spion Kiri",
+      "components": [
+        {
+          "componentId": 1201,
+          "componentName": "Spion Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Patah",
+              "limit": 1
+            },
+            {
+              "damageType": "Retak",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_2_1.png"
+    },
+    {
+      "partId": 11,
+      "partName": "Body Samping Kiri Belakang",
+      "components": [
+        {
+          "componentId": 701,
+          "componentName": "Pintu Belakang Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 3
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        },
+        {
+          "componentId": 702,
+          "componentName": "Kaca Pintu Belakang Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Retak",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_2_2.png"
+    },
+    {
+      "partId": 12,
+      "partName": "Bagasi Belakang",
+      "components": [
+        {
+          "componentId": 1501,
+          "componentName": "Bagasi Belakang",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 2
+            },
+            {
+              "damageType": "Baret",
+              "limit": 3
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_2_3.png"
+    },
+    {
+      "partId": 13,
+      "partName": "Bemper Depan Kiri",
+      "components": [
+        {
+          "componentId": 1301,
+          "componentName": "Atap Mobil",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 2
+            },
+            {
+              "damageType": "Baret",
+              "limit": 3
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_3_0.png"
+    },
+    {
+      "partId": 14,
+      "partName": "Body Samping Kiri Depan",
+      "components": [
+        {
+          "componentId": 801,
+          "componentName": "Pintu Depan Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 3
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        },
+        {
+          "componentId": 802,
+          "componentName": "Kaca Pintu Depan Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Retak",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_3_1.png"
+    },
+    {
+      "partId": 15,
+      "partName": "Ban Belakang Kiri",
+      "components": [
+        {
+          "componentId": 1001,
+          "componentName": "Ban Belakang Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Botak",
+              "limit": 2
+            },
+            {
+              "damageType": "Sobek",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "componentId": 1002,
+          "componentName": "Velg Belakang Kiri",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 1
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_3_2.png"
+    },
+    {
+      "partId": 16,
+      "partName": "Pintu Bensin",
+      "components": [
+        {
+          "componentId": 1601,
+          "componentName": "Pintu Bensin",
+          "damageOptions": [
+            {
+              "damageType": "Penyok",
+              "limit": 1
+            },
+            {
+              "damageType": "Baret",
+              "limit": 2
+            }
+          ]
+        }
+      ],
+      "partUrl": "assets/images/mobil_part_3_3.png"
+    }
+  ]
+}

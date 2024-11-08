@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inspection_grid/pages/dynamic_inspection_with_concept_3.dart';
+import 'package:inspection_grid/pages/concept_3_pages/dynamic_inspection_with_concept_3.dart';
 import 'package:inspection_grid/pages/dynamic_inspection_with_grid.dart';
 
 void main() {

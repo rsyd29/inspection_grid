@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inspection_grid/pages/concept_3_pages/question_damaged_component_page.dart';
 
-import '../generated/assets.dart';
+import '../../generated/assets.dart';
 
 class DynamicInspectionWithConcept3 extends StatefulWidget {
   const DynamicInspectionWithConcept3({
@@ -56,7 +57,13 @@ class _DynamicInspectionWithConcept3State
                 final part = data['parts'][index];
                 return InkWell(
                   onTap: () {
-                    // Placeholder for click handler
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => QuestionDamagedComponentPage(
+                          part: part,
+                        ),
+                      ),
+                    );
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(

@@ -2,7 +2,7 @@
   "parts": [
     {
       "partId": 1,
-      "partName": "Bemper Depan Kanan",
+      "partName": "Part 1",
       "components": [
         {
           "componentId": 101,
@@ -51,7 +51,7 @@
     },
     {
       "partId": 2,
-      "partName": "Body Samping Kanan Depan",
+      "partName": "Part 2",
       "components": [
         {
           "componentId": 201,
@@ -82,7 +82,7 @@
     },
     {
       "partId": 3,
-      "partName": "Ban Belakang Kanan",
+      "partName": "Part 3",
       "components": [
         {
           "componentId": 601,
@@ -117,7 +117,7 @@
     },
     {
       "partId": 4,
-      "partName": "Ban Serep",
+      "partName": "Part 4",
       "components": [
         {
           "componentId": 401,
@@ -142,7 +142,7 @@
     },
     {
       "partId": 5,
-      "partName": "Ban Depan Kanan",
+      "partName": "Part 5",
       "components": [
         {
           "componentId": 501,
@@ -177,7 +177,7 @@
     },
     {
       "partId": 6,
-      "partName": "Spion Kanan",
+      "partName": "Part 6",
       "components": [
         {
           "componentId": 1101,
@@ -198,7 +198,7 @@
     },
     {
       "partId": 7,
-      "partName": "Body Samping Kanan Belakang",
+      "partName": "Part 7",
       "components": [
         {
           "componentId": 301,
@@ -229,7 +229,7 @@
     },
     {
       "partId": 8,
-      "partName": "Kap Mesin",
+      "partName": "Part 8",
       "components": [
         {
           "componentId": 1401,
@@ -250,7 +250,7 @@
     },
     {
       "partId": 9,
-      "partName": "Ban Depan Kiri",
+      "partName": "Part 9",
       "components": [
         {
           "componentId": 901,
@@ -285,7 +285,7 @@
     },
     {
       "partId": 10,
-      "partName": "Spion Kiri",
+      "partName": "Part 10",
       "components": [
         {
           "componentId": 1201,
@@ -306,7 +306,7 @@
     },
     {
       "partId": 11,
-      "partName": "Body Samping Kiri Belakang",
+      "partName": "Part 11",
       "components": [
         {
           "componentId": 701,
@@ -337,7 +337,7 @@
     },
     {
       "partId": 12,
-      "partName": "Bagasi Belakang",
+      "partName": "Part 12",
       "components": [
         {
           "componentId": 1501,
@@ -358,7 +358,7 @@
     },
     {
       "partId": 13,
-      "partName": "Bemper Depan Kiri",
+      "partName": "Part 13",
       "components": [
         {
           "componentId": 1301,
@@ -379,7 +379,7 @@
     },
     {
       "partId": 14,
-      "partName": "Body Samping Kiri Depan",
+      "partName": "Part 14",
       "components": [
         {
           "componentId": 801,
@@ -410,7 +410,7 @@
     },
     {
       "partId": 15,
-      "partName": "Ban Belakang Kiri",
+      "partName": "Part 15",
       "components": [
         {
           "componentId": 1001,
@@ -445,7 +445,7 @@
     },
     {
       "partId": 16,
-      "partName": "Pintu Bensin",
+      "partName": "Part 16",
       "components": [
         {
           "componentId": 1601,

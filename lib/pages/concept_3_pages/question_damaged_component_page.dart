@@ -53,191 +53,213 @@ class _QuestionDamagedComponentPageState
         ),
       ),
       body: ListView(
-        children: (widget.part['components'] as List)
-            .map(
-              (e) => Column(
-                children: [
-                  Card(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.horizontal(
-                              right: Radius.circular(6),
-                              left: Radius.circular(6),
-                            ),
+        children: [
+          ...(widget.part['components'] as List).map(
+            (e) => Column(
+              children: [
+                Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.horizontal(
+                            right: Radius.circular(6),
+                            left: Radius.circular(6),
                           ),
-                          child: Center(
-                            child: Text(
-                              e['componentName'],
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            e['componentName'],
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        ...(e['damageOptions'] as List).map(
-                          (damage) => Column(
-                            children: [
-                              CheckboxListTile(
-                                title: Text(
-                                  '${damage['damageType']}',
-                                ),
-                                subtitle: Text(
-                                  'maksimal ${damage['limit']} gambar kerusakan',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                value: selectedDamages.contains(damage),
-                                onChanged: (checked) {
-                                  setState(() {
-                                    if (checked == true) {
-                                      selectedDamages.add(damage);
-                                      damageImagesControllers[
-                                              damage['damageType']] =
-                                          getOrCreateController(damage);
-                                    } else {
-                                      selectedDamages.remove(damage);
-                                      damageImagesControllers
-                                          .remove(damage['damageType']);
-                                    }
-                                  });
-                                },
+                      ),
+                      ...(e['damageOptions'] as List).map(
+                        (damage) => Column(
+                          children: [
+                            CheckboxListTile(
+                              title: Text(
+                                '${damage['damageType']}',
                               ),
-                              if (selectedDamages.contains(damage))
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                  child: MultiImagePickerView(
-                                    controller: damageImagesControllers[
-                                            damage['damageType']] ??
-                                        getOrCreateController(damage),
-                                    draggable: true,
-                                    longPressDelayMilliseconds: 250,
-                                    onDragBoxDecoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .shadow
-                                              .withOpacity(0.5),
-                                          blurRadius: 5,
-                                        ),
-                                      ],
-                                    ),
-                                    shrinkWrap: false,
-                                    padding: const EdgeInsets.all(0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 170,
-                                      childAspectRatio: 0.8,
-                                      crossAxisSpacing: 2,
-                                      mainAxisSpacing: 2,
-                                    ),
-                                    builder: (context, imageFile) {
-                                      return (imageFile.path == null)
-                                          ? Text('Not have path')
-                                          : Stack(
-                                              children: [
-                                                Positioned.fill(
-                                                  child: GestureDetector(
-                                                    onTap: () => Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            FullScreenImageView(
-                                                          imagePaths: [
-                                                            imageFile.path!
-                                                          ],
-                                                          initialPage: 0,
-                                                          keyText: e[
-                                                              'componentName'],
-                                                          valueText: damage[
-                                                              'damageType'],
-                                                        ),
+                              subtitle: Text(
+                                'maksimal ${damage['limit']} gambar kerusakan',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              value: selectedDamages.contains(damage),
+                              onChanged: (checked) {
+                                setState(() {
+                                  if (checked == true) {
+                                    selectedDamages.add(damage);
+                                    damageImagesControllers[
+                                            damage['damageType']] =
+                                        getOrCreateController(damage);
+                                  } else {
+                                    selectedDamages.remove(damage);
+                                    damageImagesControllers
+                                        .remove(damage['damageType']);
+                                  }
+                                });
+                              },
+                            ),
+                            if (selectedDamages.contains(damage))
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                child: MultiImagePickerView(
+                                  controller: damageImagesControllers[
+                                          damage['damageType']] ??
+                                      getOrCreateController(damage),
+                                  draggable: true,
+                                  longPressDelayMilliseconds: 250,
+                                  onDragBoxDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .shadow
+                                            .withOpacity(0.5),
+                                        blurRadius: 5,
+                                      ),
+                                    ],
+                                  ),
+                                  shrinkWrap: false,
+                                  padding: const EdgeInsets.all(0),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 170,
+                                    childAspectRatio: 0.8,
+                                    crossAxisSpacing: 2,
+                                    mainAxisSpacing: 2,
+                                  ),
+                                  builder: (context, imageFile) {
+                                    return (imageFile.path == null)
+                                        ? Text('Not have path')
+                                        : Stack(
+                                            children: [
+                                              Positioned.fill(
+                                                child: GestureDetector(
+                                                  onTap: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          FullScreenImageView(
+                                                        imagePaths: [
+                                                          imageFile.path!
+                                                        ],
+                                                        initialPage: 0,
+                                                        keyText:
+                                                            e['componentName'],
+                                                        valueText: damage[
+                                                            'damageType'],
                                                       ),
                                                     ),
-                                                    child: ImageFileView(
-                                                      imageFile: imageFile,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      fit: BoxFit.cover,
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .surface,
-                                                      errorBuilder:
-                                                          (BuildContext context,
-                                                              Object error,
-                                                              StackTrace?
-                                                                  trace) {
-                                                        return Text(
-                                                          error.toString(),
-                                                        );
-                                                      },
+                                                  ),
+                                                  child: ImageFileView(
+                                                    imageFile: imageFile,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    fit: BoxFit.cover,
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .surface,
+                                                    errorBuilder:
+                                                        (BuildContext context,
+                                                            Object error,
+                                                            StackTrace? trace) {
+                                                      return Text(
+                                                        error.toString(),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 4,
+                                                right: 4,
+                                                child: DraggableItemInkWell(
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
+                                                  onPressed: () =>
+                                                      getOrCreateController(
+                                                              damage)
+                                                          .removeImage(
+                                                              imageFile),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary
+                                                          .withOpacity(0.4),
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Icon(
+                                                      Icons
+                                                          .delete_forever_rounded,
+                                                      size: 18,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .surface,
                                                     ),
                                                   ),
                                                 ),
-                                                Positioned(
-                                                  top: 4,
-                                                  right: 4,
-                                                  child: DraggableItemInkWell(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2),
-                                                    onPressed: () =>
-                                                        getOrCreateController(
-                                                                damage)
-                                                            .removeImage(
-                                                                imageFile),
-                                                    child: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary
-                                                            .withOpacity(0.4),
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: Icon(
-                                                        Icons
-                                                            .delete_forever_rounded,
-                                                        size: 18,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .surface,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            );
-                                    },
-                                  ),
-                                )
-                            ],
-                          ),
+                                              )
+                                            ],
+                                          );
+                                  },
+                                ),
+                              )
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Divider(),
-                ],
-              ),
-            )
-            .toList(),
+                ),
+                Divider(),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+          ),
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ElevatedButton(
+          onPressed: _saveDataToLocalStorage, // Define this method to save data
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).primaryColor, // Background color
+            padding: EdgeInsets.symmetric(vertical: 15.0), // Padding
+          ),
+          child: Text(
+            'Simpan Data', // Button text
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.white,
+            ), // Text style
+          ),
+        ),
       ),
     );
+  }
+
+  void _saveDataToLocalStorage() {
+    // Implement your logic to save `selectedDamages` to local storage
+    // Example: print('Saving ${selectedDamages.length} damages to local storage...');
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 import '../../services/pick_image_service.dart';
+import '../full_screen_image_widget.dart';
 
 class QuestionDamagedComponentPage extends StatefulWidget {
   const QuestionDamagedComponentPage({
@@ -89,7 +90,7 @@ class _QuestionDamagedComponentPageState
                                   '${damage['damageType']}',
                                 ),
                                 subtitle: Text(
-                                  'maksimal gambar ${damage['limit']} kerusakan',
+                                  'maksimal ${damage['limit']} gambar kerusakan',
                                   style: TextStyle(
                                     color: Colors.red,
                                   ),
@@ -142,58 +143,86 @@ class _QuestionDamagedComponentPageState
                                       mainAxisSpacing: 2,
                                     ),
                                     builder: (context, imageFile) {
-                                      return Stack(
-                                        children: [
-                                          Positioned.fill(
-                                            child: ImageFileView(
-                                              imageFile: imageFile,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              fit: BoxFit.cover,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
-                                              errorBuilder:
-                                                  (BuildContext context,
-                                                      Object error,
-                                                      StackTrace? trace) {
-                                                return Text(
-                                                  error.toString(),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 4,
-                                            right: 4,
-                                            child: DraggableItemInkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              onPressed: () =>
-                                                  getOrCreateController(damage)
-                                                      .removeImage(imageFile),
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(5),
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary
-                                                      .withOpacity(0.4),
-                                                  shape: BoxShape.circle,
+                                      return (imageFile.path == null)
+                                          ? Text('Not have path')
+                                          : Stack(
+                                              children: [
+                                                Positioned.fill(
+                                                  child: GestureDetector(
+                                                    onTap: () => Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            FullScreenImageView(
+                                                          imagePaths: [
+                                                            imageFile.path!
+                                                          ],
+                                                          initialPage: 0,
+                                                          keyText: e[
+                                                              'componentName'],
+                                                          valueText: damage[
+                                                              'damageType'],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: ImageFileView(
+                                                      imageFile: imageFile,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      fit: BoxFit.cover,
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .surface,
+                                                      errorBuilder:
+                                                          (BuildContext context,
+                                                              Object error,
+                                                              StackTrace?
+                                                                  trace) {
+                                                        return Text(
+                                                          error.toString(),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
                                                 ),
-                                                child: Icon(
-                                                  Icons.delete_forever_rounded,
-                                                  size: 18,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .surface,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      );
+                                                Positioned(
+                                                  top: 4,
+                                                  right: 4,
+                                                  child: DraggableItemInkWell(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2),
+                                                    onPressed: () =>
+                                                        getOrCreateController(
+                                                                damage)
+                                                            .removeImage(
+                                                                imageFile),
+                                                    child: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary
+                                                            .withOpacity(0.4),
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Icon(
+                                                        Icons
+                                                            .delete_forever_rounded,
+                                                        size: 18,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .surface,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            );
                                     },
                                   ),
                                 )

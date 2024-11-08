@@ -8,6 +8,7 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import '../generated/assets.dart';
 import '../services/merged_object_service.dart';
 import '../services/secure_storage_service.dart';
+import 'full_screen_image_widget.dart';
 
 class ShowDialogQuestion extends StatefulWidget {
   final int index;
@@ -304,42 +305,76 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                       mainAxisSpacing: 2,
                                     ),
                                     builder: (context, imageFile) {
-                                      return Stack(children: [
-                                        Positioned.fill(
-                                          child: ImageFileView(
-                                            imageFile: imageFile,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 4,
-                                          right: 4,
-                                          child: DraggableItemInkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                            onPressed: () =>
-                                                getOrCreateController(
-                                                        damage.$1, damage.$2)
-                                                    .removeImage(imageFile),
-                                            child: Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary
-                                                    .withOpacity(0.4),
-                                                shape: BoxShape.circle,
+                                      return Stack(
+                                        children: [
+                                          Positioned.fill(
+                                            child: GestureDetector(
+                                              onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      FullScreenImageView(
+                                                    imagePaths: [
+                                                      imageFile.path!
+                                                    ],
+                                                    initialPage: 0,
+                                                    keyText: keyObject?['key'],
+                                                    valueText: damage.$1,
+                                                  ),
+                                                ),
                                               ),
-                                              child: Icon(
-                                                Icons.delete_forever_rounded,
-                                                size: 18,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .surface,
+                                              child: ImageFileView(
+                                                imageFile: imageFile,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                fit: BoxFit.cover,
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .surface,
+                                                errorBuilder:
+                                                    (BuildContext context,
+                                                        Object error,
+                                                        StackTrace? trace) {
+                                                  return Text(
+                                                    error.toString(),
+                                                  );
+                                                },
                                               ),
                                             ),
                                           ),
-                                        )
-                                      ]);
+                                          Positioned(
+                                            top: 4,
+                                            right: 4,
+                                            child: DraggableItemInkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                              onPressed: () =>
+                                                  getOrCreateController(
+                                                          damage.$1, damage.$2)
+                                                      .removeImage(imageFile),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary
+                                                      .withOpacity(0.4),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Icon(
+                                                  Icons.delete_forever_rounded,
+                                                  size: 18,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .surface,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      );
                                     },
                                   )),
                               const SizedBox(

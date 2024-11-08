@@ -140,15 +140,17 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   // Use the damage as a key to access the respective controller
   MultiImagePickerController getOrCreateController(String damage, int limit) {
     if (!damageImagesControllers.containsKey(damage)) {
+      // Create a new controller with the specified maximum number of images allowed
       damageImagesControllers[damage] = MultiImagePickerController(
         picker: (allowMultiple) async {
           final pickedImages = await pickImagesUsingImagePicker(allowMultiple);
           return pickedImages;
         },
-        maxImages: limit,
+        maxImages: limit, // Set maxImages upon creation
       );
       damageImagesControllers[damage]?.addListener(_updateImages);
     }
+    // Return existing or newly created controller
     return damageImagesControllers[damage]!;
   }
 

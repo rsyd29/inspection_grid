@@ -267,12 +267,23 @@ class CarouselDialogContent extends StatelessWidget {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 12.0),
                                         child: Center(
-                                          child: Text(
-                                            valueItem['answer'],
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontStyle: FontStyle.italic),
-                                            textAlign: TextAlign.center,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${valueItem['answer']}',
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Text(
+                                                'Ada ${valueItem['images'].length} kerusakan',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),

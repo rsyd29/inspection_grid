@@ -24,6 +24,7 @@ class _QuestionDamagedComponentPageState
     extends State<QuestionDamagedComponentPage> {
   List<Map<String, dynamic>> selectedDamages = [];
   Map<String, MultiImagePickerController> damageImagesControllers = {};
+  Map<String, String> imageNotes = {};
   late MultiImagePickerController controller;
 
   void _updateImages() {
@@ -202,7 +203,7 @@ class _QuestionDamagedComponentPageState
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Icon(
-                                                Icons.delete_forever_rounded,
+                                                Icons.close,
                                                 size: 18,
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -210,7 +211,81 @@ class _QuestionDamagedComponentPageState
                                               ),
                                             ),
                                           ),
-                                        )
+                                        ),
+                                        Positioned(
+                                          bottom: 4,
+                                          right: 4,
+                                          child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (ctx) {
+                                                  String note = imageNotes[
+                                                          imageFile.path] ??
+                                                      "";
+                                                  return AlertDialog(
+                                                    title:
+                                                        Text('Tambah Catatan'),
+                                                    content: TextField(
+                                                      controller:
+                                                          TextEditingController(
+                                                              text: note),
+                                                      onChanged: (value) {
+                                                        imageNotes[imageFile
+                                                            .path!] = value;
+                                                      },
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            "Masukkan catatan disini.",
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.of(ctx)
+                                                                .pop(),
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          // Save the note
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                        },
+                                                        child: Text('Save'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Colors.blueAccent,
+                                                  Colors.blue,
+                                                ]),
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.blue
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 5,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Icon(
+                                                Icons.note_add_rounded,
+                                                size: 24,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     );
                             },
@@ -257,16 +332,21 @@ class _QuestionDamagedComponentPageState
 
         for (var damageOption in component['damageOptions']) {
           if (selectedDamages.contains(damageOption)) {
-            List<String> damageImages =
-                damageImagesControllers[damageOption['damageType']]
-                        ?.images
-                        .map((img) => img.path!)
-                        .toList() ??
-                    [];
+            List<Map<String, dynamic>> damageDetails = [];
+            var controller =
+                damageImagesControllers[damageOption['damageType']];
+            if (controller != null) {
+              for (var img in controller.images) {
+                damageDetails.add({
+                  'imagePath': img.path,
+                  'note': imageNotes[img.path] ?? '',
+                });
+              }
+            }
 
             damageData.add({
               'damageType': damageOption['damageType'],
-              'damageImages': damageImages,
+              'damages': damageDetails,
             });
           }
         }

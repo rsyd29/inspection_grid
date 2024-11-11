@@ -421,8 +421,60 @@ class _QuestionDamagedComponentPageState
     );
   }
 
+  List<String> _missingImagesInformation() {
+    List<String> missingInformations = [];
+
+    for (var component in widget.part['components']) {
+      for (var damageOption in component['damageOptions']) {
+        if (selectedDamages.contains(jsonEncode({
+          'componentName': component['componentName'],
+          'damageOption': damageOption,
+        }))) {
+          var controller = damageImagesControllers[damageOption['damageType']];
+          if (controller == null || controller.images.isEmpty) {
+            missingInformations.add(
+                '${component['componentName']} - ${damageOption['damageType']}');
+          }
+        }
+      }
+    }
+
+    return missingInformations;
+  }
+
   void _saveDataToLocalStorage() async {
     try {
+      final missingInformations = _missingImagesInformation();
+
+      if (missingInformations.isNotEmpty) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Error'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    'Please upload at least one image for the following items:'),
+                ...missingInformations.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  String info = entry.value;
+                  return Text('${index + 1}. $info');
+                }).toList(),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
       // Retrieve existing data from local storage
       final storedData = await secureStorageService.getKey(key: 'thumbnail');
       Map<String, List<Map<String, dynamic>>> dataToSave = {};

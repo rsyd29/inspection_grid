@@ -33,9 +33,15 @@ class _DynamicInspectionWithConcept3State
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.title,
-          textAlign: TextAlign.center,
+        title: GestureDetector(
+          onTap: () async {
+            final data = await sss.getKey(key: 'thumbnail');
+            print('data: $data');
+          },
+          child: Text(
+            widget.title,
+            textAlign: TextAlign.center,
+          ),
         ),
         centerTitle: true,
       ),
@@ -85,7 +91,11 @@ class _DynamicInspectionWithConcept3State
                                       (e) => e as Map<String, dynamic>)
                                   .toList();
 
-                          showDamageDetailsDialog(context, data);
+                          showDamageDetailsDialog(
+                            context,
+                            part['partId'].toString(),
+                            data,
+                          );
                         } else {
                           await Navigator.of(context).push(
                             MaterialPageRoute(
@@ -187,14 +197,53 @@ class _DynamicInspectionWithConcept3State
 
   void showDamageDetailsDialog(
     BuildContext context,
+    String partId,
     List<Map<String, dynamic>> items,
-  ) {
-    showDialog(
+  ) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DialogDamageDetails(items: items);
+        return DialogDamageDetails(
+          partId: partId,
+          items: items,
+          onDelete: (componentId) async {
+            setState(() {
+              items.removeWhere(
+                (element) => element['componentId'].toString() == componentId,
+              );
+            });
+
+            final thumbnailData = await sss.getKey(key: 'thumbnail');
+            if (thumbnailData == null) {
+              return;
+            }
+
+            Map<String, dynamic> objectData = jsonDecode(thumbnailData);
+
+            if (objectData.containsKey(partId)) {
+              List<dynamic> components = objectData[partId];
+              components.removeWhere((component) {
+                bool data = component['componentId'].toString() == componentId;
+                return data;
+              });
+              if (components.isEmpty) {
+                objectData.remove(partId);
+              } else {
+                objectData[partId] = components;
+              }
+
+              await sss.cacheKeyWithValue(
+                key: 'thumbnail',
+                value: jsonEncode(objectData),
+              );
+            }
+            Navigator.of(context).pop();
+          },
+        );
       },
     );
+
+    setState(() {});
   }
 
   Future<Map<String, dynamic>> getJson() async {
@@ -204,11 +253,23 @@ class _DynamicInspectionWithConcept3State
   }
 }
 
-class DialogDamageDetails extends StatelessWidget {
-  const DialogDamageDetails({super.key, required this.items});
+class DialogDamageDetails extends StatefulWidget {
+  const DialogDamageDetails({
+    super.key,
+    required this.partId,
+    required this.items,
+    required this.onDelete,
+  });
 
+  final String partId;
   final List<Map<String, dynamic>> items;
+  final Function(String componentId) onDelete;
 
+  @override
+  State<DialogDamageDetails> createState() => _DialogDamageDetailsState();
+}
+
+class _DialogDamageDetailsState extends State<DialogDamageDetails> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -230,9 +291,9 @@ class DialogDamageDetails extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: items.length,
+                    itemCount: widget.items.length,
                     itemBuilder: (context, index) {
-                      final item = items[index];
+                      final item = widget.items[index];
                       return Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -357,7 +418,9 @@ class DialogDamageDetails extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.delete),
                                     onPressed: () {
-                                      // onDelete(index);
+                                      widget.onDelete(
+                                        item['componentId'].toString(),
+                                      );
                                     },
                                   ),
                                 ],

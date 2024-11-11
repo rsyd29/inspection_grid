@@ -415,6 +415,8 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                                           hintText:
                                                               "Masukkan catatan disini.",
                                                         ),
+                                                        maxLines:
+                                                            null, // Allows multiple lines of input
                                                       ),
                                                       actions: [
                                                         TextButton(

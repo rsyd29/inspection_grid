@@ -338,6 +338,8 @@ class _QuestionDamagedComponentPageState
                                                         hintText:
                                                             "Masukkan catatan disini.",
                                                       ),
+                                                      maxLines:
+                                                          null, // Allows multiple lines of input
                                                     ),
                                                     actions: [
                                                       TextButton(

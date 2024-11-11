@@ -423,8 +423,19 @@ class _QuestionDamagedComponentPageState
 
   void _saveDataToLocalStorage() async {
     try {
-      // Create the final data structure
+      // Retrieve existing data from local storage
+      final storedData = await secureStorageService.getKey(key: 'thumbnail');
       Map<String, List<Map<String, dynamic>>> dataToSave = {};
+
+      if (storedData != null) {
+        dataToSave = (jsonDecode(storedData) as Map<String, dynamic>)
+            .map<String, List<Map<String, dynamic>>>((key, value) {
+          return MapEntry(
+            key,
+            List<Map<String, dynamic>>.from(value),
+          );
+        });
+      }
 
       for (var component in widget.part['components']) {
         List<Map<String, dynamic>> damageData = [];
@@ -454,15 +465,40 @@ class _QuestionDamagedComponentPageState
         }
 
         if (damageData.isNotEmpty) {
-          dataToSave[widget.part['partId'].toString()] = [
-            {
-              'componentId': component['componentId'],
-              'componentName': component['componentName'],
-              'damageOptions': damageData,
-              'x': component['x'],
-              'y': component['y'],
-            }
-          ];
+          dataToSave.update(
+            widget.part['partId'].toString(),
+            (existing) {
+              // Check for existing component entry and update
+              final index = existing.indexWhere(
+                  (map) => map['componentId'] == component['componentId']);
+              if (index >= 0) {
+                existing[index]['damageOptions'] = damageData;
+                return existing;
+              } else {
+                // Add new component entry
+                return [
+                  ...existing,
+                  {
+                    'componentId': component['componentId'],
+                    'componentName': component['componentName'],
+                    'damageOptions': damageData,
+                    'x': component['x'],
+                    'y': component['y'],
+                  }
+                ];
+              }
+            },
+            // Add new part entry if it doesn't exist
+            ifAbsent: () => [
+              {
+                'componentId': component['componentId'],
+                'componentName': component['componentName'],
+                'damageOptions': damageData,
+                'x': component['x'],
+                'y': component['y'],
+              }
+            ],
+          );
         }
       }
 

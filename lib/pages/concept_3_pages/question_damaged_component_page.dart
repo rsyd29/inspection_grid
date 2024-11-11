@@ -23,7 +23,7 @@ class QuestionDamagedComponentPage extends StatefulWidget {
 
 class _QuestionDamagedComponentPageState
     extends State<QuestionDamagedComponentPage> {
-  List<Map<String, dynamic>> selectedDamages = [];
+  List<String> selectedDamages = [];
   Map<String, MultiImagePickerController> damageImagesControllers = {};
   Map<String, String> imageNotes = {};
   late MultiImagePickerController controller;
@@ -38,7 +38,8 @@ class _QuestionDamagedComponentPageState
   );
 
   MultiImagePickerController getOrCreateController(
-      Map<String, dynamic> damage) {
+    Map<String, dynamic> damage,
+  ) {
     if (!damageImagesControllers.containsKey(damage['damageType'])) {
       // Create a new controller with the specified maximum number of images allowed
       damageImagesControllers[damage['damageType']] =
@@ -74,24 +75,27 @@ class _QuestionDamagedComponentPageState
           String partIdStr = widget.part['partId'].toString();
           if (data.containsKey(partIdStr)) {
             for (var damageOptionData in data[partIdStr]!) {
-              for (var damageData in damageOptionData['damageOptions']) {
-                for (var damageOption in component['damageOptions']) {
-                  if (damageOption['damageType'] == damageData['damageType']) {
-                    selectedDamages.add(damageOption);
-                    MultiImagePickerController controller =
-                        getOrCreateController(damageOption);
+              if (componentIdStr ==
+                  damageOptionData['componentId'].toString()) {
+                // Check componentId
+                for (var damageData in damageOptionData['damageOptions']) {
+                  for (var damageOption in component['damageOptions']) {
+                    if (damageOption['damageType'] ==
+                        damageData['damageType']) {
+                      selectedDamages.add(jsonEncode({
+                        'componentName': component['componentName'],
+                        'damageOption': damageOption,
+                      }));
+                      MultiImagePickerController controller =
+                          getOrCreateController(damageOption);
 
-                    final imagePaths = [];
-                    // Initialize MultiImagePickerView from `damages`
-                    if (damageOptionData['damageOptions'] != null) {
-                      for (var damageOption
-                          in damageOptionData['damageOptions']) {
-                        if (damageOption['damages'] != null) {
-                          for (var damage in damageOption['damages']) {
-                            String path = damage['imagePath'];
-                            imageNotes[path] = damage['note'] ?? '';
-                            imagePaths.add(path);
-                          }
+                      final imagePaths = [];
+                      // Initialize MultiImagePickerView from `damages`
+                      if (damageData['damages'] != null) {
+                        for (var damage in damageData['damages']) {
+                          String path = damage['imagePath'];
+                          imageNotes[path] = damage['note'] ?? '';
+                          imagePaths.add(path);
                         }
                       }
 
@@ -177,22 +181,34 @@ class _QuestionDamagedComponentPageState
                             color: Colors.red,
                           ),
                         ),
-                        value: selectedDamages.contains(damage),
+                        value: (selectedDamages.contains(jsonEncode({
+                          'componentName': e['componentName'],
+                          'damageOption': damage,
+                        }))),
                         onChanged: (checked) {
                           setState(() {
                             if (checked == true) {
-                              selectedDamages.add(damage);
+                              selectedDamages.add(jsonEncode({
+                                'componentName': e['componentName'],
+                                'damageOption': damage
+                              }));
                               damageImagesControllers[damage['damageType']] =
                                   getOrCreateController(damage);
                             } else {
-                              selectedDamages.remove(damage);
+                              selectedDamages.remove(jsonEncode({
+                                'componentName': e['componentName'],
+                                'damageOption': damage,
+                              }));
                               damageImagesControllers
                                   .remove(damage['damageType']);
                             }
                           });
                         },
                       ),
-                      if (selectedDamages.contains(damage))
+                      if (selectedDamages.contains(jsonEncode({
+                        'componentName': e['componentName'],
+                        'damageOption': damage,
+                      })))
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.2,
                           child: MultiImagePickerView(
@@ -408,7 +424,10 @@ class _QuestionDamagedComponentPageState
         List<Map<String, dynamic>> damageData = [];
 
         for (var damageOption in component['damageOptions']) {
-          if (selectedDamages.contains(damageOption)) {
+          if (selectedDamages.contains(jsonEncode({
+            'componentName': component['componentName'],
+            'damageOption': damageOption,
+          }))) {
             List<Map<String, dynamic>> damageDetails = [];
             var controller =
                 damageImagesControllers[damageOption['damageType']];

@@ -13,6 +13,7 @@ class QuestionDamagedComponentPage extends StatefulWidget {
     super.key,
     required this.part,
   });
+
   final Map<String, dynamic> part;
 
   @override
@@ -52,6 +53,48 @@ class _QuestionDamagedComponentPageState
     }
     // Return existing or newly created controller
     return damageImagesControllers[damage['damageType']]!;
+  }
+
+  void _loadDataFromLocalStorage() async {
+    try {
+      final storedData = await secureStorageService.getKey(key: 'thumbnail');
+      if (storedData != null) {
+        final Map<String, dynamic> rawData = jsonDecode(storedData);
+        final data =
+            rawData.map<String, List<Map<String, dynamic>>>((key, value) {
+          return MapEntry(
+            key,
+            List<Map<String, dynamic>>.from(value),
+          );
+        });
+
+        selectedDamages = [];
+        for (var component in widget.part['components']) {
+          String componentIdStr = component['componentId'].toString();
+          if (data.containsKey(componentIdStr)) {
+            for (var damageData in data[componentIdStr]![0]['damages']) {
+              for (var damageOption in component['damageOptions']) {
+                if (damageOption['damageType'] == damageData['damageType']) {
+                  selectedDamages.add(damageOption);
+                  getOrCreateController(damageOption);
+                }
+              }
+            }
+          }
+        }
+
+        print(selectedDamages.toString());
+        setState(() {});
+      }
+    } catch (e) {
+      print('Error loading data: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDataFromLocalStorage();
   }
 
   @override

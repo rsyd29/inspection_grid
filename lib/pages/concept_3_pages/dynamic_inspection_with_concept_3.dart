@@ -93,7 +93,7 @@ class _DynamicInspectionWithConcept3State
 
                           showDamageDetailsDialog(
                             context,
-                            part['partId'].toString(),
+                            part,
                             data,
                           );
                         } else {
@@ -197,12 +197,13 @@ class _DynamicInspectionWithConcept3State
 
   void showDamageDetailsDialog(
     BuildContext context,
-    String partId,
+    Map<String, dynamic> part,
     List<Map<String, dynamic>> items,
   ) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
+        String partId = part['partId'].toString();
         return DialogDamageDetails(
           partId: partId,
           items: items,
@@ -237,7 +238,17 @@ class _DynamicInspectionWithConcept3State
                 value: jsonEncode(objectData),
               );
             }
+          },
+          onAdd: () async {
             Navigator.of(context).pop();
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => QuestionDamagedComponentPage(
+                  part: part,
+                ),
+              ),
+            );
+            setState(() {});
           },
         );
       },
@@ -259,11 +270,13 @@ class DialogDamageDetails extends StatefulWidget {
     required this.partId,
     required this.items,
     required this.onDelete,
+    required this.onAdd,
   });
 
   final String partId;
   final List<Map<String, dynamic>> items;
   final Function(String componentId) onDelete;
+  final Function onAdd;
 
   @override
   State<DialogDamageDetails> createState() => _DialogDamageDetailsState();
@@ -421,6 +434,7 @@ class _DialogDamageDetailsState extends State<DialogDamageDetails> {
                                       widget.onDelete(
                                         item['componentId'].toString(),
                                       );
+                                      Navigator.pop(context);
                                     },
                                   ),
                                 ],
@@ -446,7 +460,7 @@ class _DialogDamageDetailsState extends State<DialogDamageDetails> {
                               borderRadius: BorderRadius.circular(8.0))),
                     ),
                     onPressed: () {
-                      // onAdd();
+                      widget.onAdd();
                     },
                     child: Text(
                       'Tambah Inspeksi Komponen',

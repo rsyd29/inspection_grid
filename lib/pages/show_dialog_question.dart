@@ -495,93 +495,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                       borderRadius:
                                           BorderRadius.circular(8.0))),
                             ),
-                            onPressed: () async {
-                              Map<String, dynamic> dataCache =
-                                  widget.cache == null
-                                      ? {}
-                                      : jsonDecode(widget.cache!);
-
-                              List<Map<String, dynamic>?> existingEntries =
-                                  (dataCache['${widget.index}']
-                                              as List<dynamic>?)
-                                          ?.cast<Map<String, dynamic>>() ??
-                                      [];
-
-                              for (var damage in selectedDamages) {
-                                List<Map<String, dynamic>> imageDetails = [];
-                                var controller =
-                                    damageImagesControllers[damage.$1];
-                                if (controller != null) {
-                                  for (var img in controller.images) {
-                                    imageDetails.add({
-                                      'path': img.path,
-                                      'note': imageNotes[img.path] ?? '',
-                                    });
-                                  }
-                                }
-
-                                Map<String, dynamic> damageEntry = {
-                                  'answer': damage.$1,
-                                  'images': imageDetails,
-                                };
-
-                                var entryIndex = existingEntries.indexWhere(
-                                  (entry) => entry?['key'] == keyObject?['key'],
-                                );
-
-                                if (entryIndex != -1) {
-                                  var valuesList = (existingEntries[entryIndex]
-                                          ?['values'] as List)
-                                      .map((item) =>
-                                          item as Map<String, dynamic>)
-                                      .toList();
-                                  var existingDamageIndex =
-                                      valuesList.indexWhere(
-                                    (item) => item['answer'] == damage.$1,
-                                  );
-
-                                  if (existingDamageIndex != -1) {
-                                    // Update image for existing damage
-                                    valuesList[existingDamageIndex]['images'] =
-                                        damageEntry['images'];
-                                  } else {
-                                    // Add new damageEntry if it doesn't exist
-                                    valuesList.add(damageEntry);
-                                  }
-
-                                  existingEntries[entryIndex]?['values'] =
-                                      valuesList;
-                                } else {
-                                  // If key is not found, you can choose to handle this
-                                  // situation separately or keep the logic as needed.
-                                  existingEntries.add({
-                                    'key': keyObject?['key'],
-                                    'values': [damageEntry],
-                                    'x': keyObject?['x'],
-                                    'y': keyObject?['y'],
-                                  });
-                                }
-                              }
-
-                              dataCache['${widget.index}'] = existingEntries;
-
-                              Map<String, dynamic> dataMergedObject =
-                                  mergeObjects(dataCache, {});
-
-                              Navigator.pop(context);
-
-                              SecureStorageService sss =
-                                  SecureStorageServiceImpl(
-                                flutterSecureStorage: FlutterSecureStorage(),
-                              );
-
-                              final cacheKey = await sss.cacheKeyWithValue(
-                                key: 'task',
-                                value: jsonEncode(dataMergedObject),
-                              );
-
-                              print('data: $dataMergedObject');
-                            },
+                            onPressed: _saveDataToLocalStorage,
                             child: Text(
                               'Simpan',
                               style: TextStyle(color: Colors.white),
@@ -598,6 +512,123 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
         );
       },
     );
+  }
+
+  void _saveDataToLocalStorage() async {
+    try {
+      bool hasIncompleteUploads = false;
+      StringBuffer incompleteDetails = StringBuffer();
+      int counter = 1;
+
+      // Check for incomplete image uploads
+      for (var damage in selectedDamages) {
+        var controller = damageImagesControllers[damage.$1];
+        if (controller == null || controller.images.isEmpty) {
+          hasIncompleteUploads = true;
+
+          // Append missing information ('key' and 'answer')
+          incompleteDetails
+              .writeln('${counter++}. ${keyObject?['key']} - ${damage.$1}');
+        }
+      }
+
+      if (hasIncompleteUploads) {
+        // Show dialog with missing information
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text(
+                'The following entries are missing images:\n\n$incompleteDetails'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return; // Stop further execution
+      }
+
+      Map<String, dynamic> dataCache =
+          widget.cache == null ? {} : jsonDecode(widget.cache!);
+
+      List<Map<String, dynamic>?> existingEntries =
+          (dataCache['${widget.index}'] as List<dynamic>?)
+                  ?.cast<Map<String, dynamic>>() ??
+              [];
+
+      for (var damage in selectedDamages) {
+        List<Map<String, dynamic>> imageDetails = [];
+        var controller = damageImagesControllers[damage.$1];
+        if (controller != null) {
+          for (var img in controller.images) {
+            imageDetails.add({
+              'path': img.path,
+              'note': imageNotes[img.path] ?? '',
+            });
+          }
+        }
+
+        Map<String, dynamic> damageEntry = {
+          'answer': damage.$1,
+          'images': imageDetails,
+        };
+
+        var entryIndex = existingEntries.indexWhere(
+          (entry) => entry?['key'] == keyObject?['key'],
+        );
+
+        if (entryIndex != -1) {
+          var valuesList = (existingEntries[entryIndex]?['values'] as List)
+              .map((item) => item as Map<String, dynamic>)
+              .toList();
+          var existingDamageIndex = valuesList.indexWhere(
+            (item) => item['answer'] == damage.$1,
+          );
+
+          if (existingDamageIndex != -1) {
+            // Update image for existing damage
+            valuesList[existingDamageIndex]['images'] = damageEntry['images'];
+          } else {
+            // Add new damageEntry if it doesn't exist
+            valuesList.add(damageEntry);
+          }
+
+          existingEntries[entryIndex]?['values'] = valuesList;
+        } else {
+          // If key is not found, you can choose to handle this
+          // situation separately or keep the logic as needed.
+          existingEntries.add({
+            'key': keyObject?['key'],
+            'values': [damageEntry],
+            'x': keyObject?['x'],
+            'y': keyObject?['y'],
+          });
+        }
+      }
+
+      dataCache['${widget.index}'] = existingEntries;
+
+      Map<String, dynamic> dataMergedObject = mergeObjects(dataCache, {});
+
+      Navigator.pop(context);
+
+      SecureStorageService sss = SecureStorageServiceImpl(
+        flutterSecureStorage: FlutterSecureStorage(),
+      );
+
+      final cacheKey = await sss.cacheKeyWithValue(
+        key: 'task',
+        value: jsonEncode(dataMergedObject),
+      );
+
+      print('data: $dataMergedObject');
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: s);
+    }
   }
 
   Future<Map<String, dynamic>> getJson() async {

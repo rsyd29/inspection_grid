@@ -461,7 +461,7 @@ class _QuestionDamagedComponentPageState
                   int index = entry.key;
                   String info = entry.value;
                   return Text('${index + 1}. $info');
-                }).toList(),
+                }),
               ],
             ),
             actions: [

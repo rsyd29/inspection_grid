@@ -71,37 +71,44 @@ class _QuestionDamagedComponentPageState
         selectedDamages = [];
         for (var component in widget.part['components']) {
           String componentIdStr = component['componentId'].toString();
-          if (data.containsKey(componentIdStr)) {
-            for (var damageData in data[componentIdStr]![0]['damages']) {
-              for (var damageOption in component['damageOptions']) {
-                if (damageOption['damageType'] == damageData['damageType']) {
-                  selectedDamages.add(damageOption);
-                  MultiImagePickerController controller =
-                      getOrCreateController(damageOption);
+          String partIdStr = widget.part['partId'].toString();
+          if (data.containsKey(partIdStr)) {
+            for (var damageOptionData in data[partIdStr]!) {
+              for (var damageData in damageOptionData['damageOptions']) {
+                for (var damageOption in component['damageOptions']) {
+                  if (damageOption['damageType'] == damageData['damageType']) {
+                    selectedDamages.add(damageOption);
+                    MultiImagePickerController controller =
+                        getOrCreateController(damageOption);
 
-                  // Initialize MultiImagePickerView from `damages`
-                  if (damageData['damages'] != null) {
-                    final imageFiles = List<ImageFile>.from(
-                      damageData['damages'].map(
-                        (damage) {
-                          String path = damage['imagePath'];
-                          final fileName = path.split('/').last;
-                          final fileExtension = fileName.split('.').last;
+                    final imagePaths = [];
+                    // Initialize MultiImagePickerView from `damages`
+                    if (damageOptionData['damageOptions'] != null) {
+                      for (var damageOption
+                          in damageOptionData['damageOptions']) {
+                        if (damageOption['damages'] != null) {
+                          for (var damage in damageOption['damages']) {
+                            String path = damage['imagePath'];
+                            imageNotes[path] = damage['note'] ?? '';
+                            imagePaths.add(path);
+                          }
+                        }
+                      }
 
-                          // Add the note for each image to imageNotes
-                          imageNotes[path] = damage['note'] ?? '';
+                      final imageFiles = imagePaths.map((path) {
+                        final fileName = path.split('/').last;
+                        final fileExtension = fileName.split('.').last;
 
-                          return ImageFile(
-                            path.hashCode.toString(),
-                            name: fileName,
-                            extension: fileExtension,
-                            path: path,
-                          );
-                        },
-                      ),
-                    );
+                        return ImageFile(
+                          path.hashCode.toString(),
+                          name: fileName,
+                          extension: fileExtension,
+                          path: path,
+                        );
+                      }).toList();
 
-                    controller.updateImages(imageFiles);
+                      controller.updateImages(imageFiles);
+                    }
                   }
                 }
               }
@@ -112,8 +119,9 @@ class _QuestionDamagedComponentPageState
         print(selectedDamages.toString());
         setState(() {});
       }
-    } catch (e) {
+    } catch (e, s) {
       print('Error loading data: $e');
+      debugPrintStack(stackTrace: s);
     }
   }
 
@@ -421,11 +429,11 @@ class _QuestionDamagedComponentPageState
         }
 
         if (damageData.isNotEmpty) {
-          dataToSave[component['componentId'].toString()] = [
+          dataToSave[widget.part['partId'].toString()] = [
             {
               'componentId': component['componentId'],
               'componentName': component['componentName'],
-              'damages': damageData,
+              'damageOptions': damageData,
               'x': component['x'],
               'y': component['y'],
             }

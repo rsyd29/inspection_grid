@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    'Thumbnail\n(Konsep 3)\nOn Progress',
+                    'Thumbnail\n(Konsep 3)',
                     textAlign: TextAlign.center,
                   ),
                 ),

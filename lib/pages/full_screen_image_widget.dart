@@ -6,14 +6,14 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class FullScreenImageView extends StatefulWidget {
   // Change to StatefulWidget
-  final List<String> imagePaths;
+  final List<Map<String, dynamic>> images;
   final int initialPage;
   final String keyText;
   final String valueText;
 
   const FullScreenImageView({
     super.key,
-    required this.imagePaths,
+    required this.images,
     required this.initialPage,
     required this.keyText,
     required this.valueText,
@@ -51,10 +51,10 @@ class _FullScreenImageViewState extends State<FullScreenImageView> {
         child: Stack(
           children: [
             PhotoViewGallery.builder(
-              itemCount: widget.imagePaths.length,
+              itemCount: widget.images.length,
               builder: (context, index) {
                 return PhotoViewGalleryPageOptions(
-                  imageProvider: FileImage(File(widget.imagePaths[index])),
+                  imageProvider: FileImage(File(widget.images[index]['path'])),
                   minScale: PhotoViewComputedScale.contained,
                   maxScale: PhotoViewComputedScale.covered * 2,
                 );
@@ -71,9 +71,40 @@ class _FullScreenImageViewState extends State<FullScreenImageView> {
               bottom: 20,
               right: 20,
               child: Text(
-                '${_currentPage + 1} / ${widget.imagePaths.length}',
+                '${_currentPage + 1} / ${widget.images.length}',
                 // Display dynamic currentPage
                 style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Note:', // Optional Label
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      widget.images[_currentPage]['note'] ?? '',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

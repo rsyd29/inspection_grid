@@ -250,7 +250,13 @@ class _QuestionDamagedComponentPageState
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     FullScreenImageView(
-                                                  imagePaths: [imageFile.path!],
+                                                  images: [
+                                                    {
+                                                      'path': imageFile.path!,
+                                                      'note': imageNotes[
+                                                          imageFile.path],
+                                                    },
+                                                  ],
                                                   initialPage: 0,
                                                   keyText: e['componentName'],
                                                   valueText:

@@ -32,6 +32,7 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
   Map<String, MultiImagePickerController> damageImagesControllers = {};
   String? selectedValue;
   late MultiImagePickerController controller;
+  Map<String, String> imageNotes = {};
 
   _ShowDialogQuestionState()
       : controller = MultiImagePickerController(
@@ -115,8 +116,18 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
               imagePaths.add(value['images']);
             } else if (value['images'] is List<dynamic>) {
               List<dynamic> imageList = value['images'] as List<dynamic>;
-              imagePaths
-                  .addAll(imageList.map((image) => image as String).toList());
+              imagePaths.addAll(imageList
+                  .map((image) {
+                    if (image is Map<String, dynamic>) {
+                      String path = image['path'];
+                      String note = image['note'];
+                      imageNotes[path] = note;
+                      return path;
+                    }
+                    return null;
+                  })
+                  .whereType<String>()
+                  .toList());
             }
           }
         }
@@ -314,8 +325,12 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       FullScreenImageView(
-                                                    imagePaths: [
-                                                      imageFile.path!
+                                                    images: [
+                                                      {
+                                                        'path': imageFile.path!,
+                                                        'note': imageNotes[
+                                                            imageFile.path],
+                                                      }
                                                     ],
                                                     initialPage: 0,
                                                     keyText: keyObject?['key'],
@@ -372,7 +387,82 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                                 ),
                                               ),
                                             ),
-                                          )
+                                          ),
+                                          Positioned(
+                                            bottom: 4,
+                                            right: 4,
+                                            child: InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (ctx) {
+                                                    String note = imageNotes[
+                                                            imageFile.path] ??
+                                                        "";
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                          'Tambah Catatan'),
+                                                      content: TextField(
+                                                        controller:
+                                                            TextEditingController(
+                                                                text: note),
+                                                        onChanged: (value) {
+                                                          imageNotes[imageFile
+                                                              .path!] = value;
+                                                        },
+                                                        decoration:
+                                                            InputDecoration(
+                                                          hintText:
+                                                              "Masukkan catatan disini.",
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.of(ctx)
+                                                                  .pop(),
+                                                          child: Text('Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            // Save the note
+                                                            Navigator.of(ctx)
+                                                                .pop();
+                                                          },
+                                                          child: Text('Save'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      LinearGradient(colors: [
+                                                    Colors.blueAccent,
+                                                    Colors.blue,
+                                                  ]),
+                                                  shape: BoxShape.circle,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.blue
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 5,
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Icon(
+                                                  Icons.note_add_rounded,
+                                                  size: 24,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       );
                                     },
@@ -418,13 +508,21 @@ class _ShowDialogQuestionState extends State<ShowDialogQuestion> {
                                       [];
 
                               for (var damage in selectedDamages) {
+                                List<Map<String, dynamic>> imageDetails = [];
+                                var controller =
+                                    damageImagesControllers[damage.$1];
+                                if (controller != null) {
+                                  for (var img in controller.images) {
+                                    imageDetails.add({
+                                      'path': img.path,
+                                      'note': imageNotes[img.path] ?? '',
+                                    });
+                                  }
+                                }
+
                                 Map<String, dynamic> damageEntry = {
                                   'answer': damage.$1,
-                                  'images': damageImagesControllers[damage.$1]
-                                      ?.images
-                                      .whereType<ImageFile>()
-                                      .map((imageFile) => imageFile.path)
-                                      .toList(),
+                                  'images': imageDetails,
                                 };
 
                                 var entryIndex = existingEntries.indexWhere(

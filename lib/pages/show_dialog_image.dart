@@ -234,8 +234,12 @@ class CarouselDialogContent extends StatelessWidget {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 FullScreenImageView(
-                                              imagePaths: List<String>.from(
-                                                  valueItem['images']),
+                                              images: List<
+                                                      Map<String,
+                                                          dynamic>>.from(
+                                                  valueItem['images'].map(
+                                                      (image) => image as Map<
+                                                          String, dynamic>)),
                                               initialPage: 0,
                                               keyText: item['key'],
                                               valueText: valueItem['answer'],
@@ -249,9 +253,12 @@ class CarouselDialogContent extends StatelessWidget {
                                                 valueItem['images'].length,
                                             builder: (context, index) {
                                               return PhotoViewGalleryPageOptions(
-                                                imageProvider: FileImage(File(
-                                                    valueItem['images']
-                                                        [index])),
+                                                imageProvider: FileImage(
+                                                  File(
+                                                    valueItem['images'][index]
+                                                        ['path'],
+                                                  ),
+                                                ),
                                                 minScale: PhotoViewComputedScale
                                                     .contained,
                                                 maxScale: PhotoViewComputedScale

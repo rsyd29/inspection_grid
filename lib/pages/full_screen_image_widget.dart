@@ -45,6 +45,9 @@ class _FullScreenImageViewState extends State<FullScreenImageView> {
           ],
         ),
         centerTitle: true,
+        actions: [
+          Text('${_currentPage + 1} / ${widget.images.length}'),
+        ],
       ),
       backgroundColor: Colors.black,
       body: Center(
@@ -74,47 +77,70 @@ class _FullScreenImageViewState extends State<FullScreenImageView> {
             ),
             Positioned(
               bottom: 20,
-              right: 20,
-              child: Text(
-                '${_currentPage + 1} / ${widget.images.length}',
-                // Display dynamic currentPage
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-            Positioned(
-              bottom: 20,
-              left: 20,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Note:', // Optional Label
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+              left: 0,
+              child: GestureDetector(
+                onTap: _showLongTextDialog,
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Catatan:', // Optional Label
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      widget.images[_currentPage]['note'] ?? '',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+                      SizedBox(height: 4),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width -
+                              16, // Adjust width
+                        ),
+                        child: Text(
+                          widget.images[_currentPage]['note'] ?? '',
+                          maxLines: 2, // Limit to number of visible lines
+                          overflow:
+                              TextOverflow.ellipsis, // Ellipsis for overflow
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showLongTextDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Catatan'),
+          content: SingleChildScrollView(
+            child: Text(widget.images[_currentPage]['note'] ?? ''),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Tutup'),
+            ),
+          ],
+        );
+      },
     );
   }
 

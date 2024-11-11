@@ -36,32 +36,33 @@ class _DynamicInspectionWithConcept3State
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: getJson(),
+        future: sss.getKey(key: 'thumbnail'),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(), // Centered loading indicator
-            );
-          }
-          final data = snapshot.data;
+          final cache = snapshot.data;
+          Map<String, dynamic>? objectData =
+              cache == null ? {} : jsonDecode(cache);
 
-          if (data == null) {
-            return Text(
-              'No Data Available',
-              style: TextStyle(color: Colors.black),
-            ); // Styled text
-          }
+          return FutureBuilder(
+            future: getJson(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child:
+                      CircularProgressIndicator(), // Centered loading indicator
+                );
+              }
+              final data = snapshot.data;
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FutureBuilder(
-              future: sss.getKey(key: 'thumbnail'),
-              builder: (context, snapshot) {
-                final cache = snapshot.data;
-                Map<String, dynamic>? objectData =
-                    cache == null ? {} : jsonDecode(cache);
+              if (data == null) {
+                return Text(
+                  'No Data Available',
+                  style: TextStyle(color: Colors.black),
+                ); // Styled text
+              }
 
-                return GridView.builder(
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
                   itemCount: data['parts'].length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
@@ -71,8 +72,8 @@ class _DynamicInspectionWithConcept3State
                     final showBadge =
                         objectData?.keys.contains(part['partId'].toString());
                     return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
+                      onTap: () async {
+                        await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => QuestionDamagedComponentPage(
                               part: part,
@@ -159,9 +160,9 @@ class _DynamicInspectionWithConcept3State
                       ),
                     );
                   },
-                );
-              },
-            ),
+                ),
+              );
+            },
           );
         },
       ),

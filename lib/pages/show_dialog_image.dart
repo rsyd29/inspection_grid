@@ -35,7 +35,7 @@ class CarouselDialogContent extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Inspection Details Component',
+                'Komponen Detail Inspeksi',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),

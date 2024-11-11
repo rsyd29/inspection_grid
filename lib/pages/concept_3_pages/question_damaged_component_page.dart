@@ -76,7 +76,30 @@ class _QuestionDamagedComponentPageState
               for (var damageOption in component['damageOptions']) {
                 if (damageOption['damageType'] == damageData['damageType']) {
                   selectedDamages.add(damageOption);
-                  getOrCreateController(damageOption);
+                  MultiImagePickerController controller =
+                      getOrCreateController(damageOption);
+
+                  // Initialize MultiImagePickerView from `damages`
+                  if (damageData['damages'] != null) {
+                    final imageFiles = List<ImageFile>.from(
+                      damageData['damages'].map(
+                        (damage) {
+                          String path = damage['imagePath'];
+                          final fileName = path.split('/').last;
+                          final fileExtension = fileName.split('.').last;
+
+                          return ImageFile(
+                            path.hashCode.toString(),
+                            name: fileName,
+                            extension: fileExtension,
+                            path: path,
+                          );
+                        },
+                      ),
+                    );
+
+                    controller.updateImages(imageFiles);
+                  }
                 }
               }
             }

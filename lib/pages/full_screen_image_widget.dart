@@ -54,7 +54,12 @@ class _FullScreenImageViewState extends State<FullScreenImageView> {
               itemCount: widget.images.length,
               builder: (context, index) {
                 return PhotoViewGalleryPageOptions(
-                  imageProvider: FileImage(File(widget.images[index]['path'])),
+                  imageProvider: FileImage(
+                    File(
+                      widget.images[index]['imagePath'] ??
+                          widget.images[index]['path'],
+                    ),
+                  ),
                   minScale: PhotoViewComputedScale.contained,
                   maxScale: PhotoViewComputedScale.covered * 2,
                 );

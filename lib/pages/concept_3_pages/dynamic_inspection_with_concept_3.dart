@@ -419,25 +419,17 @@ class _DialogDamageDetailsState extends State<DialogDamageDetails> {
                                 }).toList(),
                               ),
                               SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () {
-                                      // onEdit(gridIndex, item);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () {
-                                      widget.onDelete(
-                                        item['componentId'].toString(),
-                                      );
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    widget.onDelete(
+                                      item['componentId'].toString(),
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                ),
                               ),
                             ],
                           ),

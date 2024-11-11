@@ -88,6 +88,9 @@ class _QuestionDamagedComponentPageState
                           final fileName = path.split('/').last;
                           final fileExtension = fileName.split('.').last;
 
+                          // Add the note for each image to imageNotes
+                          imageNotes[path] = damage['note'] ?? '';
+
                           return ImageFile(
                             path.hashCode.toString(),
                             name: fileName,

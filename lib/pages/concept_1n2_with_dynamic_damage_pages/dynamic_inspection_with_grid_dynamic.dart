@@ -62,37 +62,94 @@ class _DynamicInspectionWithGridDynamicState
   // Add function to create circle widgets from objectData only for specific grid indices
   List<Widget> _buildCoordCircles(
     Map<String, dynamic> data,
-    int index, // Adjust the function to accept a single index.
+    int index,
   ) {
     List<Widget> circles = [];
     if (data.containsKey('$index')) {
       final components = data['$index'] as List<dynamic>;
-      for (var component in components) {
-        double x = component['x'];
-        double y = component['y'];
+      for (var i = 0; i < components.length; i++) {
+        double x = components[i]['x'];
+        double y = components[i]['y'];
 
         circles.add(
-          Positioned(
-            left: x, // Position adjusted within grid cell
-            top: y,
-            child: GestureDetector(
-              onTap: () {
-                print('show dialog update component: $component');
-              },
-              child: Container(
-                width: 10.0,
-                height: 10.0,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
+          LayoutBuilder(builder: (context, constraints) {
+            return Stack(
+              // Ensure the parent of Positioned is Stack
+              children: [
+                Positioned(
+                  left: x,
+                  top: y,
+                  child: Draggable(
+                    data: {'component': components[i], 'index': i},
+                    feedback: Container(
+                      width: 10.0,
+                      height: 10.0,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    childWhenDragging: SizedBox.shrink(),
+                    onDragEnd: (details) {
+                      setState(() {
+                        final RenderBox renderBox =
+                            context.findRenderObject() as RenderBox;
+                        final Offset localPosition =
+                            renderBox.globalToLocal(details.offset);
+
+                        // Calculate the new position based on Global to Local converted position
+                        double newX =
+                            (localPosition.dx / constraints.maxWidth) *
+                                constraints.maxWidth;
+                        double newY =
+                            (localPosition.dy / constraints.maxHeight) *
+                                constraints.maxHeight;
+
+                        // Ensure newX, newY are within the grid cell bounds
+                        newX = newX.clamp(0.0, constraints.maxWidth - 10.0);
+                        newY = newY.clamp(0.0, constraints.maxHeight - 10.0);
+
+                        // Update with new position
+                        components[i]['x'] = newX;
+                        components[i]['y'] = newY;
+
+                        // Save changes
+                        _saveUpdatedCoordinates(index.toString(), data);
+                      });
+                    },
+                    child: GestureDetector(
+                      onTap: () {
+                        print('show dialog update component: ${components[i]}');
+                      },
+                      child: Container(
+                        width: 10.0,
+                        height: 10.0,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
+              ],
+            );
+          }),
         );
       }
     }
     return circles;
+  }
+
+  // Save updated coordinates to local storage
+  void _saveUpdatedCoordinates(
+      String indexKey, Map<String, dynamic> data) async {
+    // Convert updated data to JSON
+    String updatedDataJson = jsonEncode(data);
+
+    // Save the updated data to secure storage
+    await sss.cacheKeyWithValue(key: 'grid_dynamic', value: updatedDataJson);
+    print('Coordinates for index $indexKey saved.');
   }
 
   @override

@@ -5,10 +5,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inspection_grid/services/pick_image_service.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
-import '../generated/assets.dart';
-import '../services/merged_object_service.dart';
-import '../services/secure_storage_service.dart';
-import 'full_screen_image_widget.dart';
+import '../../generated/assets.dart';
+import '../../services/merged_object_service.dart';
+import '../../services/secure_storage_service.dart';
+import '../full_screen_image_widget.dart';
 
 class ShowDialogQuestion extends StatefulWidget {
   final int index;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:inspection_grid/pages/concept_1n2_with_dynamic_damage_pages/dynamic_inspection_with_grid_dynamic.dart';
 import 'package:inspection_grid/pages/concept_3_pages/dynamic_inspection_with_concept_3.dart';
-import 'package:inspection_grid/pages/dynamic_inspection_with_grid.dart';
+
+import 'pages/concept_1n2_pages/dynamic_inspection_with_grid.dart';
 
 void main() {
   runApp(const MyApp());
@@ -77,6 +79,32 @@ class MyApp extends StatelessWidget {
                   },
                   child: Text(
                     'Grid\n(Konsep 1 + Konsep 2)',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const DynamicInspectionWithGridDynamic(
+                          title: 'Grid Dynamic\n(Konsep 1 + Konsep 2)',
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Grid Dynamic\n(Konsep 1 + Konsep 2)',
                     textAlign: TextAlign.center,
                   ),
                 ),

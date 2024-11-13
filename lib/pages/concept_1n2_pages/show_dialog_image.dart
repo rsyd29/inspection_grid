@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import 'full_screen_image_widget.dart';
+import '../full_screen_image_widget.dart';
 
 class CarouselDialogContent extends StatelessWidget {
   const CarouselDialogContent({

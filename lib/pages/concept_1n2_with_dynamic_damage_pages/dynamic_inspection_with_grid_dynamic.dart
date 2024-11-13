@@ -24,35 +24,35 @@ class _DynamicInspectionWithGridDynamicState
     extends State<DynamicInspectionWithGridDynamic> {
   // Daftar komponen dengan key sebagai index
   final List<int> listComponent = List.generate(16, (index) => index);
+  Offset? offset;
 
   // Function to convert global to local coordinates for the InteractiveViewer
   void _handleTap(
-    TapDownDetails details,
-    double scaleFactor,
     int componentIndex,
     Map<String, dynamic> data,
   ) async {
-    final Offset position = details.localPosition / scaleFactor;
+    if (offset != null) {
+      Offset? position = offset;
+      final listComponent = (data['$componentIndex']['listComponent'] as List)
+          .map(
+            (e) => e as Map<String, dynamic>,
+          )
+          .toList();
+      print(
+        'ListComponent $listComponent, Koordinat: (${position?.dx}, ${position?.dy})',
+      );
 
-    final listComponent = (data['$componentIndex']['listComponent'] as List)
-        .map(
-          (e) => e as Map<String, dynamic>,
-        )
-        .toList();
-    print(
-      'ListComponent $listComponent, Koordinat: (${position.dx}, ${position.dy})',
-    );
-
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => QuestionComponentPage(
-          index: componentIndex,
-          listComponent: listComponent,
-          position: position,
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => QuestionComponentPage(
+            index: componentIndex,
+            listComponent: listComponent,
+            position: position,
+          ),
         ),
-      ),
-    );
-    setState(() {});
+      );
+      setState(() {});
+    }
   }
 
   SecureStorageService sss = SecureStorageServiceImpl(
@@ -71,18 +71,25 @@ class _DynamicInspectionWithGridDynamicState
         double x = component['x'];
         double y = component['y'];
 
-        circles.add(Positioned(
-          left: x, // Position adjusted within grid cell
-          top: y,
-          child: Container(
-            width: 10.0,
-            height: 10.0,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              shape: BoxShape.circle,
+        circles.add(
+          Positioned(
+            left: x, // Position adjusted within grid cell
+            top: y,
+            child: GestureDetector(
+              onTap: () {
+                print('show dialog update component: $component');
+              },
+              child: Container(
+                width: 10.0,
+                height: 10.0,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
             ),
           ),
-        ));
+        );
       }
     }
     return circles;
@@ -145,9 +152,8 @@ class _DynamicInspectionWithGridDynamicState
 
                         return InteractiveViewer(
                           transformationController: transformationController,
-                          boundaryMargin: EdgeInsets.all(20),
-                          minScale: 1.0,
-                          maxScale: 3.0,
+                          minScale: 0.2,
+                          maxScale: 10.0,
                           child: Stack(
                             children: [
                               Image.asset(
@@ -166,11 +172,14 @@ class _DynamicInspectionWithGridDynamicState
                                 itemCount: listComponent.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
-                                    onTapDown: (TapDownDetails details) =>
-                                        _handleTap(
-                                      details,
-                                      transformationController.value
-                                          .getMaxScaleOnAxis(),
+                                    onTapDown: (details) async {
+                                      setState(() {
+                                        offset = details.localPosition /
+                                            transformationController.value
+                                                .getMaxScaleOnAxis();
+                                      });
+                                    },
+                                    onLongPress: () => _handleTap(
                                       index,
                                       data['data'],
                                     ),
@@ -182,7 +191,11 @@ class _DynamicInspectionWithGridDynamicState
                                               color:
                                                   Colors.grey.withOpacity(0.5),
                                             ),
-                                            color: Colors.transparent,
+                                            color: (objectData?.keys
+                                                        .contains('$index') ??
+                                                    false)
+                                                ? Colors.red.withOpacity(0.5)
+                                                : Colors.transparent,
                                           ),
                                         ),
                                         ..._buildCoordCircles(

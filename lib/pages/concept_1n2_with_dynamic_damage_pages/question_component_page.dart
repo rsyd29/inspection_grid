@@ -17,7 +17,7 @@ class QuestionComponentPage extends StatefulWidget {
   });
   final int index;
   final List<Map<String, dynamic>> listComponent;
-  final Offset position;
+  final Offset? position;
 
   @override
   State<QuestionComponentPage> createState() => _QuestionComponentPageState();
@@ -523,8 +523,8 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
                   {
                     'componentName': listComponent['componentName'],
                     'answers': damageData,
-                    'x': widget.position.dx,
-                    'y': widget.position.dy,
+                    'x': widget.position?.dx,
+                    'y': widget.position?.dy,
                   }
                 ];
               }
@@ -534,8 +534,8 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
               {
                 'componentName': listComponent['componentName'],
                 'answers': damageData,
-                'x': widget.position.dx,
-                'y': widget.position.dy,
+                'x': widget.position?.dx,
+                'y': widget.position?.dy,
               }
             ],
           );

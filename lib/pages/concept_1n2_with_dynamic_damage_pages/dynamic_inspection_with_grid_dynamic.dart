@@ -25,13 +25,6 @@ class _DynamicInspectionWithGridDynamicState
   // Daftar komponen dengan key sebagai index
   final List<int> listComponent = List.generate(16, (index) => index);
 
-  // Fungsi untuk mendapatkan koordinat dari tap
-  void _onTapDown(TapDownDetails details, int componentIndex) {
-    final Offset position = details.localPosition;
-    print(
-        'Komponen $componentIndex, Koordinat: (${position.dx}, ${position.dy})');
-  }
-
   // Function to convert global to local coordinates for the InteractiveViewer
   void _handleTap(
     TapDownDetails details,
@@ -66,103 +59,151 @@ class _DynamicInspectionWithGridDynamicState
     flutterSecureStorage: FlutterSecureStorage(),
   );
 
+  // Add function to create circle widgets from objectData only for specific grid indices
+  List<Widget> _buildCoordCircles(
+    Map<String, dynamic> data,
+    int index, // Adjust the function to accept a single index.
+  ) {
+    List<Widget> circles = [];
+    if (data.containsKey('$index')) {
+      final components = data['$index'] as List<dynamic>;
+      for (var component in components) {
+        double x = component['x'];
+        double y = component['y'];
+
+        circles.add(Positioned(
+          left: x, // Position adjusted within grid cell
+          top: y,
+          child: Container(
+            width: 10.0,
+            height: 10.0,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ));
+      }
+    }
+    return circles;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getJson(),
+      future: sss.getKey(key: 'grid_dynamic'),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(), // Centered loading indicator
-          );
-        }
-        final data = snapshot.data;
+        final cache = snapshot.data;
+        Map<String, dynamic>? objectData =
+            cache == null ? {} : jsonDecode(cache);
+        return FutureBuilder(
+          future: getJson(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child:
+                    CircularProgressIndicator(), // Centered loading indicator
+              );
+            }
+            final data = snapshot.data;
 
-        if (data == null) {
-          return Text(
-            'No Data Available',
-            style: TextStyle(color: Colors.black),
-          ); // Styled text
-        }
+            if (data == null) {
+              return Text(
+                'No Data Available',
+                style: TextStyle(color: Colors.black),
+              ); // Styled text
+            }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: GestureDetector(
-              onTap: () async {
-                final data = await sss.getKey(key: 'grid_dynamic');
-                print('data: $data');
-              },
-              child: Text(widget.title),
-            ),
-          ),
-          body: Center(
-            child: FutureBuilder(
-              future: _getImageSize(data['image']),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator(); // Tampilkan loading jika ukuran gambar belum didapat
-                }
+            return Scaffold(
+              appBar: AppBar(
+                title: GestureDetector(
+                  onTap: () async {
+                    final data = await sss.getKey(key: 'grid_dynamic');
+                    print('data: $data');
+                  },
+                  child: Text(widget.title),
+                ),
+              ),
+              body: Center(
+                child: FutureBuilder(
+                  future: _getImageSize(data['image']),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator(); // Tampilkan loading jika ukuran gambar belum didapat
+                    }
 
-                Size imageSize = snapshot.data!;
-                double aspectRatio = imageSize.width / imageSize.height;
+                    Size imageSize = snapshot.data!;
+                    double aspectRatio = imageSize.width / imageSize.height;
 
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    double imageWidth = constraints.maxWidth;
-                    double imageHeight = imageWidth / aspectRatio;
-                    final TransformationController transformationController =
-                        TransformationController();
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        double imageWidth = constraints.maxWidth;
+                        double imageHeight = imageWidth / aspectRatio;
+                        final TransformationController
+                            transformationController =
+                            TransformationController();
 
-                    return InteractiveViewer(
-                      transformationController: transformationController,
-                      boundaryMargin: EdgeInsets.all(20),
-                      minScale: 1.0,
-                      maxScale: 3.0,
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            data['image'],
-                            width: imageWidth,
-                            height: imageHeight,
-                            fit: BoxFit.cover,
-                          ),
-                          GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              childAspectRatio: aspectRatio,
-                            ),
-                            itemCount: listComponent.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTapDown: (TapDownDetails details) =>
-                                    _handleTap(
-                                  details,
-                                  transformationController.value
-                                      .getMaxScaleOnAxis(),
-                                  index,
-                                  data['data'],
+                        return InteractiveViewer(
+                          transformationController: transformationController,
+                          boundaryMargin: EdgeInsets.all(20),
+                          minScale: 1.0,
+                          maxScale: 3.0,
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                data['image'],
+                                width: imageWidth,
+                                height: imageHeight,
+                                fit: BoxFit.cover,
+                              ),
+                              GridView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  childAspectRatio: aspectRatio,
                                 ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5),
+                                itemCount: listComponent.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTapDown: (TapDownDetails details) =>
+                                        _handleTap(
+                                      details,
+                                      transformationController.value
+                                          .getMaxScaleOnAxis(),
+                                      index,
+                                      data['data'],
                                     ),
-                                    color: Colors.transparent,
-                                  ),
-                                ),
-                              );
-                            },
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                            ),
+                                            color: Colors.transparent,
+                                          ),
+                                        ),
+                                        ..._buildCoordCircles(
+                                          objectData ?? {},
+                                          index,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         );
       },
     );

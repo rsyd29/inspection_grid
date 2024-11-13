@@ -31,10 +31,17 @@ class _DynamicInspectionWithGridDynamicState
 
   // Function to convert global to local coordinates for the InteractiveViewer
   void _handleTap(
-      TapDownDetails details, double scaleFactor, int componentIndex) {
+    TapDownDetails details,
+    double scaleFactor,
+    int componentIndex,
+    Map<String, dynamic> data,
+  ) {
     final Offset position = details.localPosition / scaleFactor;
+
+    final listComponent = data['$componentIndex'];
     print(
-        'Komponen $componentIndex, Koordinat: (${position.dx}, ${position.dy})');
+      'ListComponent $listComponent, Koordinat: (${position.dx}, ${position.dy})',
+    );
   }
 
   @override
@@ -107,6 +114,7 @@ class _DynamicInspectionWithGridDynamicState
                                   transformationController.value
                                       .getMaxScaleOnAxis(),
                                   index,
+                                  data['data'],
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(

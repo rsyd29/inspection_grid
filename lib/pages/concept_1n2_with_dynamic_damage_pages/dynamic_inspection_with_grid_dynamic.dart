@@ -29,6 +29,14 @@ class _DynamicInspectionWithGridDynamicState
         'Komponen $componentIndex, Koordinat: (${position.dx}, ${position.dy})');
   }
 
+  // Function to convert global to local coordinates for the InteractiveViewer
+  void _handleTap(
+      TapDownDetails details, double scaleFactor, int componentIndex) {
+    final Offset position = details.localPosition / scaleFactor;
+    print(
+        'Komponen $componentIndex, Koordinat: (${position.dx}, ${position.dy})');
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -67,39 +75,52 @@ class _DynamicInspectionWithGridDynamicState
                   builder: (context, constraints) {
                     double imageWidth = constraints.maxWidth;
                     double imageHeight = imageWidth / aspectRatio;
+                    final TransformationController transformationController =
+                        TransformationController();
 
-                    return Stack(
-                      children: [
-                        Image.asset(
-                          data['image'],
-                          width: imageWidth,
-                          height: imageHeight,
-                          fit: BoxFit.cover,
-                        ),
-                        GridView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            childAspectRatio: aspectRatio,
+                    return InteractiveViewer(
+                      transformationController: transformationController,
+                      boundaryMargin: EdgeInsets.all(20),
+                      minScale: 1.0,
+                      maxScale: 3.0,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            data['image'],
+                            width: imageWidth,
+                            height: imageHeight,
+                            fit: BoxFit.cover,
                           ),
-                          itemCount: listComponent.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTapDown: (TapDownDetails details) =>
-                                  _onTapDown(details, index),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey.withOpacity(0.5),
-                                  ),
-                                  color: Colors.transparent,
+                          GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              childAspectRatio: aspectRatio,
+                            ),
+                            itemCount: listComponent.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTapDown: (TapDownDetails details) =>
+                                    _handleTap(
+                                  details,
+                                  transformationController.value
+                                      .getMaxScaleOnAxis(),
+                                  index,
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                    ),
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     );
                   },
                 );

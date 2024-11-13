@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inspection_grid/pages/concept_1n2_with_dynamic_damage_pages/question_component_page.dart';
 
 import '../../generated/assets.dart';
+import '../../services/secure_storage_service.dart';
 
 class DynamicInspectionWithGridDynamic extends StatefulWidget {
   const DynamicInspectionWithGridDynamic({
@@ -51,6 +53,7 @@ class _DynamicInspectionWithGridDynamicState
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuestionComponentPage(
+          index: componentIndex,
           listComponent: listComponent,
           position: position,
         ),
@@ -58,6 +61,10 @@ class _DynamicInspectionWithGridDynamicState
     );
     setState(() {});
   }
+
+  SecureStorageService sss = SecureStorageServiceImpl(
+    flutterSecureStorage: FlutterSecureStorage(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +87,13 @@ class _DynamicInspectionWithGridDynamicState
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(widget.title),
+            title: GestureDetector(
+              onTap: () async {
+                final data = await sss.getKey(key: 'grid_dynamic');
+                print('data: $data');
+              },
+              child: Text(widget.title),
+            ),
           ),
           body: Center(
             child: FutureBuilder(

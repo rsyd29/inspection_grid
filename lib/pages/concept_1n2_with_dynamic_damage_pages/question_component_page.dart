@@ -11,9 +11,11 @@ import '../full_screen_image_widget.dart';
 class QuestionComponentPage extends StatefulWidget {
   const QuestionComponentPage({
     super.key,
+    required this.index,
     required this.listComponent,
     required this.position,
   });
+  final int index;
   final List<Map<String, dynamic>> listComponent;
   final Offset position;
 
@@ -55,7 +57,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
 
   // void _loadDataFromLocalStorage() async {
   //   try {
-  //     final storedData = await secureStorageService.getKey(key: 'grid');
+  //     final storedData = await secureStorageService.getKey(key: 'grid_dynamic');
   //     if (storedData != null) {
   //       final Map<String, dynamic> rawData = jsonDecode(storedData);
   //       final data =
@@ -390,6 +392,173 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
           ),
         ],
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ElevatedButton(
+          onPressed: _saveDataToLocalStorage, // Define this method to save data
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).primaryColor, // Background color
+            padding: EdgeInsets.symmetric(vertical: 15.0), // Padding
+          ),
+          child: Text(
+            'Simpan Data', // Button text
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.white,
+            ), // Text style
+          ),
+        ),
+      ),
     );
+  }
+
+  List<String> _missingImagesInformation() {
+    List<String> missingInformations = [];
+
+    for (var listComponent in widget.listComponent) {
+      for (var answer in listComponent['answers']) {
+        if (selectedDamages.contains(jsonEncode({
+          'componentName': listComponent['componentName'],
+          'answer': answer,
+        }))) {
+          var controller = damageImagesControllers[answer['answer']];
+          if (controller == null || controller.images.isEmpty) {
+            missingInformations
+                .add('${listComponent['componentName']} - ${answer['answer']}');
+          }
+        }
+      }
+    }
+
+    return missingInformations;
+  }
+
+  void _saveDataToLocalStorage() async {
+    try {
+      final missingInformations = _missingImagesInformation();
+
+      if (missingInformations.isNotEmpty) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Error'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    'Please upload at least one image for the following items:'),
+                ...missingInformations.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  String info = entry.value;
+                  return Text('${index + 1}. $info');
+                }),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      // Retrieve existing data from local storage
+      final storedData = await secureStorageService.getKey(key: 'grid_dynamic');
+      Map<String, List<Map<String, dynamic>>> dataToSave = {};
+
+      if (storedData != null) {
+        dataToSave = (jsonDecode(storedData) as Map<String, dynamic>)
+            .map<String, List<Map<String, dynamic>>>((key, value) {
+          return MapEntry(
+            key,
+            List<Map<String, dynamic>>.from(value),
+          );
+        });
+      }
+
+      for (var listComponent in widget.listComponent) {
+        List<Map<String, dynamic>> damageData = [];
+
+        for (var answer in listComponent['answers']) {
+          if (selectedDamages.contains(jsonEncode({
+            'componentName': listComponent['componentName'],
+            'answer': answer,
+          }))) {
+            List<Map<String, dynamic>> damageDetails = [];
+            var controller = damageImagesControllers[answer['answer']];
+            if (controller != null) {
+              for (var img in controller.images) {
+                damageDetails.add({
+                  'imagePath': img.path,
+                  'note': imageNotes[img.path] ?? '',
+                });
+              }
+            }
+
+            damageData.add({
+              'answer': answer['answer'],
+              'damages': damageDetails,
+            });
+          }
+        }
+
+        if (damageData.isNotEmpty) {
+          dataToSave.update(
+            widget.index.toString(),
+            (existing) {
+              // Check for existing listComponent entry and update
+              final index = existing.indexWhere(
+                  (map) => map['componentId'] == listComponent['componentId']);
+              if (index >= 0) {
+                existing[index]['answers'] = damageData;
+                return existing;
+              } else {
+                // Add new listComponent entry
+                return [
+                  ...existing,
+                  {
+                    'componentName': listComponent['componentName'],
+                    'answers': damageData,
+                    'x': widget.position.dx,
+                    'y': widget.position.dy,
+                  }
+                ];
+              }
+            },
+            // Add new part entry if it doesn't exist
+            ifAbsent: () => [
+              {
+                'componentName': listComponent['componentName'],
+                'answers': damageData,
+                'x': widget.position.dx,
+                'y': widget.position.dy,
+              }
+            ],
+          );
+        }
+      }
+
+      // Convert to JSON string
+      String jsonData = jsonEncode(dataToSave);
+
+      // Save JSON data
+      bool isSuccess = await secureStorageService.cacheKeyWithValue(
+        key: 'grid_dynamic',
+        value: jsonData,
+      );
+
+      if (isSuccess) {
+        print('Data saved successfully');
+        Navigator.of(context).pop();
+      } else {
+        print('Failed to save data');
+      }
+    } catch (e) {
+      print('Error saving data: $e');
+    }
   }
 }

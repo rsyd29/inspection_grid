@@ -511,26 +511,26 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
             widget.index.toString(),
             (existing) {
               // Check for existing listComponent entry and update
-              final index = existing.indexWhere((map) {
-                final data =
-                    map['componentName'] == listComponent['componentName'];
-                return data;
-              });
-              if (index >= 0) {
-                existing[index]['answers'] = damageData;
-                return existing;
-              } else {
-                // Add new listComponent entry
-                return [
-                  ...existing,
-                  {
-                    'componentName': listComponent['componentName'],
-                    'answers': damageData,
-                    'x': widget.position?.dx,
-                    'y': widget.position?.dy,
-                  }
-                ];
-              }
+              // final index = existing.indexWhere((map) {
+              //   final data =
+              //       map['componentName'] == listComponent['componentName'];
+              //   return data;
+              // });
+              // if (index >= 0) {
+              //   existing[index]['answers'] = damageData;
+              //   return existing;
+              // } else {
+              // Add new listComponent entry
+              return [
+                ...existing,
+                {
+                  'componentName': listComponent['componentName'],
+                  'answers': damageData,
+                  'x': widget.position?.dx,
+                  'y': widget.position?.dy,
+                }
+              ];
+              // }
             },
             // Add new part entry if it doesn't exist
             ifAbsent: () => [

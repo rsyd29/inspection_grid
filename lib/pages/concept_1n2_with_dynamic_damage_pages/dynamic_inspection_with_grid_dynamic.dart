@@ -61,6 +61,7 @@ class _DynamicInspectionWithGridDynamicState
 
   // Add function to create circle widgets from objectData only for specific grid indices
   List<Widget> _buildCoordCircles(
+    Map<String, dynamic> listComponent,
     Map<String, dynamic> component,
     int index,
   ) {
@@ -149,7 +150,14 @@ class _DynamicInspectionWithGridDynamicState
                                         builder: (context) =>
                                             QuestionComponentPage(
                                           index: i, // or the appropriate index
-                                          listComponent: components,
+                                          listComponent:
+                                              (listComponent['$index']
+                                                      ['listComponent'] as List)
+                                                  .map(
+                                                    (e) => e
+                                                        as Map<String, dynamic>,
+                                                  )
+                                                  .toList(),
                                           position: Offset(x,
                                               y), // or the appropriate position
                                         ),
@@ -302,6 +310,7 @@ class _DynamicInspectionWithGridDynamicState
                                           ),
                                         ),
                                         ..._buildCoordCircles(
+                                          data['data'],
                                           objectData ?? {},
                                           index,
                                         ),

@@ -173,6 +173,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
                           ),
                         ),
                         value: (selectedDamages.contains(jsonEncode({
+                          'section': e['section'],
                           'componentName': e['componentName'],
                           'answer': answer,
                         }))),
@@ -180,6 +181,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
                           setState(() {
                             if (checked == true) {
                               selectedDamages.add(jsonEncode({
+                                'section': e['section'],
                                 'componentName': e['componentName'],
                                 'answer': answer,
                               }));
@@ -187,6 +189,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
                                   getOrCreateController(answer);
                             } else {
                               selectedDamages.remove(jsonEncode({
+                                'section': e['section'],
                                 'componentName': e['componentName'],
                                 'answer': answer,
                               }));
@@ -196,6 +199,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
                         },
                       ),
                       if (selectedDamages.contains(jsonEncode({
+                        'section': e['section'],
                         'componentName': e['componentName'],
                         'answer': answer,
                       })))
@@ -418,6 +422,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
     for (var listComponent in widget.listComponent) {
       for (var answer in listComponent['answers']) {
         if (selectedDamages.contains(jsonEncode({
+          'section': listComponent['section'],
           'componentName': listComponent['componentName'],
           'answer': answer,
         }))) {
@@ -485,6 +490,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
 
         for (var answer in listComponent['answers']) {
           if (selectedDamages.contains(jsonEncode({
+            'section': listComponent['section'],
             'componentName': listComponent['componentName'],
             'answer': answer,
           }))) {
@@ -524,6 +530,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
               return [
                 ...existing,
                 {
+                  'section': listComponent['section'],
                   'componentName': listComponent['componentName'],
                   'answers': damageData,
                   'x': widget.position?.dx,
@@ -535,6 +542,7 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
             // Add new part entry if it doesn't exist
             ifAbsent: () => [
               {
+                'section': listComponent['section'],
                 'componentName': listComponent['componentName'],
                 'answers': damageData,
                 'x': widget.position?.dx,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:inspection_grid/pages/concept_1n2_with_dynamic_damage_pages/question_component_page.dart';
 
 import '../../generated/assets.dart';
 
@@ -35,13 +36,27 @@ class _DynamicInspectionWithGridDynamicState
     double scaleFactor,
     int componentIndex,
     Map<String, dynamic> data,
-  ) {
+  ) async {
     final Offset position = details.localPosition / scaleFactor;
 
-    final listComponent = data['$componentIndex'];
+    final listComponent = (data['$componentIndex']['listComponent'] as List)
+        .map(
+          (e) => e as Map<String, dynamic>,
+        )
+        .toList();
     print(
       'ListComponent $listComponent, Koordinat: (${position.dx}, ${position.dy})',
     );
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestionComponentPage(
+          listComponent: listComponent,
+          position: position,
+        ),
+      ),
+    );
+    setState(() {});
   }
 
   @override

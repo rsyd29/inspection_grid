@@ -1,0 +1,395 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:multi_image_picker_view/multi_image_picker_view.dart';
+
+import '../../services/pick_image_service.dart';
+import '../../services/secure_storage_service.dart';
+import '../full_screen_image_widget.dart';
+
+class QuestionComponentPage extends StatefulWidget {
+  const QuestionComponentPage({
+    super.key,
+    required this.listComponent,
+    required this.position,
+  });
+  final List<Map<String, dynamic>> listComponent;
+  final Offset position;
+
+  @override
+  State<QuestionComponentPage> createState() => _QuestionComponentPageState();
+}
+
+class _QuestionComponentPageState extends State<QuestionComponentPage> {
+  List<String> selectedDamages = [];
+  Map<String, MultiImagePickerController> damageImagesControllers = {};
+  Map<String, String> imageNotes = {};
+  late MultiImagePickerController controller;
+  // Instantiate SecureStorageService
+  final SecureStorageService secureStorageService = SecureStorageServiceImpl(
+    flutterSecureStorage: FlutterSecureStorage(),
+  );
+
+  void _updateImages() {
+    setState(() {});
+  }
+
+  MultiImagePickerController getOrCreateController(
+    Map<String, dynamic> answer,
+  ) {
+    if (!damageImagesControllers.containsKey(answer['answer'])) {
+      // Create a new controller with the specified maximum number of images allowed
+      damageImagesControllers[answer['answer']] = MultiImagePickerController(
+        picker: (allowMultiple) async {
+          final pickedImages = await pickImagesUsingImagePicker(allowMultiple);
+          return pickedImages;
+        },
+        maxImages: answer['limit'], // Set maxImages upon creation
+      );
+      damageImagesControllers[answer['answer']]?.addListener(_updateImages);
+    }
+    // Return existing or newly created controller
+    return damageImagesControllers[answer['answer']]!;
+  }
+
+  // void _loadDataFromLocalStorage() async {
+  //   try {
+  //     final storedData = await secureStorageService.getKey(key: 'grid');
+  //     if (storedData != null) {
+  //       final Map<String, dynamic> rawData = jsonDecode(storedData);
+  //       final data =
+  //           rawData.map<String, List<Map<String, dynamic>>>((key, value) {
+  //         return MapEntry(
+  //           key,
+  //           List<Map<String, dynamic>>.from(value),
+  //         );
+  //       });
+  //
+  //       selectedDamages = [];
+  //       for (var component in widget.listComponent['components']) {
+  //         String componentIdStr = component['componentId'].toString();
+  //         String partIdStr = widget.listComponent['partId'].toString();
+  //         if (data.containsKey(partIdStr)) {
+  //           for (var damageOptionData in data[partIdStr]!) {
+  //             if (componentIdStr ==
+  //                 damageOptionData['componentId'].toString()) {
+  //               // Check componentId
+  //               for (var damageData in damageOptionData['damageOptions']) {
+  //                 for (var damageOption in component['damageOptions']) {
+  //                   if (damageOption['damageType'] ==
+  //                       damageData['damageType']) {
+  //                     selectedDamages.add(jsonEncode({
+  //                       'componentName': component['componentName'],
+  //                       'damageOption': damageOption,
+  //                     }));
+  //                     MultiImagePickerController controller =
+  //                         getOrCreateController(damageOption);
+  //
+  //                     final imagePaths = [];
+  //                     // Initialize MultiImagePickerView from `damages`
+  //                     if (damageData['damages'] != null) {
+  //                       for (var damage in damageData['damages']) {
+  //                         String path = damage['imagePath'];
+  //                         imageNotes[path] = damage['note'] ?? '';
+  //                         imagePaths.add(path);
+  //                       }
+  //                     }
+  //
+  //                     final imageFiles = imagePaths.map((path) {
+  //                       final fileName = path.split('/').last;
+  //                       final fileExtension = fileName.split('.').last;
+  //
+  //                       return ImageFile(
+  //                         path.hashCode.toString(),
+  //                         name: fileName,
+  //                         extension: fileExtension,
+  //                         path: path,
+  //                       );
+  //                     }).toList();
+  //
+  //                     controller.updateImages(imageFiles);
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //
+  //       print(selectedDamages.toString());
+  //       setState(() {});
+  //     }
+  //   } catch (e, s) {
+  //     print('Error loading data: $e');
+  //     debugPrintStack(stackTrace: s);
+  //   }
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    // _loadDataFromLocalStorage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pertanyaan Komponen'),
+      ),
+      body: ListView(
+        children: [
+          ...((widget.listComponent as List).map(
+            (e) => ExpansionTile(
+              title: Text(
+                '${e['section']}\n${e['componentName']}',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text((e['answers'] as List)
+                  .map(
+                    (e) => e['answer'],
+                  )
+                  .toList()
+                  .toString()),
+              children: [
+                ...(e['answers'] as List).map(
+                  (answer) => Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text(
+                          '${answer['answer']}',
+                        ),
+                        subtitle: Text(
+                          'maksimal ${answer['limit']} gambar kerusakan',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        value: (selectedDamages.contains(jsonEncode({
+                          'componentName': e['componentName'],
+                          'answer': answer,
+                        }))),
+                        onChanged: (checked) {
+                          setState(() {
+                            if (checked == true) {
+                              selectedDamages.add(jsonEncode({
+                                'componentName': e['componentName'],
+                                'answer': answer,
+                              }));
+                              damageImagesControllers[answer['answer']] =
+                                  getOrCreateController(answer);
+                            } else {
+                              selectedDamages.remove(jsonEncode({
+                                'componentName': e['componentName'],
+                                'answer': answer,
+                              }));
+                              damageImagesControllers.remove(answer['answer']);
+                            }
+                          });
+                        },
+                      ),
+                      if (selectedDamages.contains(jsonEncode({
+                        'componentName': e['componentName'],
+                        'answer': answer,
+                      })))
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child: MultiImagePickerView(
+                            controller:
+                                damageImagesControllers[answer['answer']] ??
+                                    getOrCreateController(answer),
+                            draggable: true,
+                            longPressDelayMilliseconds: 250,
+                            onDragBoxDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .shadow
+                                      .withOpacity(0.5),
+                                  blurRadius: 5,
+                                ),
+                              ],
+                            ),
+                            shrinkWrap: false,
+                            padding: const EdgeInsets.all(0),
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 170,
+                              childAspectRatio: 0.8,
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2,
+                            ),
+                            builder: (context, imageFile) {
+                              return (imageFile.path == null)
+                                  ? Text('Not have path')
+                                  : Stack(
+                                      children: [
+                                        Positioned.fill(
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    FullScreenImageView(
+                                                  images: [
+                                                    {
+                                                      'path': imageFile.path!,
+                                                      'note': imageNotes[
+                                                          imageFile.path],
+                                                    },
+                                                  ],
+                                                  initialPage: 0,
+                                                  keyText: e['componentName'],
+                                                  valueText: answer['answer'],
+                                                ),
+                                              ),
+                                            ),
+                                            child: ImageFileView(
+                                              imageFile: imageFile,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              fit: BoxFit.cover,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object error,
+                                                      StackTrace? trace) {
+                                                return Text(
+                                                  error.toString(),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 4,
+                                          right: 4,
+                                          child: DraggableItemInkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            onPressed: () =>
+                                                getOrCreateController(answer)
+                                                    .removeImage(imageFile),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                                    .withOpacity(0.4),
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Icon(
+                                                Icons.close,
+                                                size: 18,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 4,
+                                          right: 4,
+                                          child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (ctx) {
+                                                  String note = imageNotes[
+                                                          imageFile.path] ??
+                                                      "";
+                                                  return AlertDialog(
+                                                    title:
+                                                        Text('Tambah Catatan'),
+                                                    content: TextField(
+                                                      controller:
+                                                          TextEditingController(
+                                                              text: note),
+                                                      onChanged: (value) {
+                                                        imageNotes[imageFile
+                                                            .path!] = value;
+                                                      },
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            "Masukkan catatan disini.",
+                                                      ),
+                                                      maxLines:
+                                                          null, // Allows multiple lines of input
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.of(ctx)
+                                                                .pop(),
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          // Save the note
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                        },
+                                                        child: Text('Save'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Colors.blueAccent,
+                                                  Colors.blue,
+                                                ]),
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.blue
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 5,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Icon(
+                                                Icons.note_add_rounded,
+                                                size: 24,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+          ),
+        ],
+      ),
+    );
+  }
+}

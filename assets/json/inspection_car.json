@@ -1,0 +1,978 @@
+{
+  "category": "MOBIL",
+  "image": "assets/images/mobil.png",
+  "data": {
+    "0": {
+      "listComponent": [
+        {
+          "section": "WHEELS",
+          "componentName": "BAN_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 1
+            },
+            {
+              "answer": "PECAH",
+              "limit": 5
+            },
+            {
+              "answer": "AUS",
+              "limit": 2
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 3
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIS_BODI_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "LIGHTS",
+          "componentName": "LAMPU_SEN_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "MENYALA",
+              "limit": 100
+            },
+            {
+              "answer": "MATI",
+              "limit": 100
+            },
+            {
+              "answer": "RETUR",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "LAMPU_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "MENYALA",
+              "limit": 100
+            },
+            {
+              "answer": "MATI",
+              "limit": 100
+            },
+            {
+              "answer": "RETUR",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "GRILL_DEPAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "KARAT",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "BEMPER_DEPAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "LEPAS",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "LAMPU_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "MENYALA",
+              "limit": 100
+            },
+            {
+              "answer": "MATI",
+              "limit": 100
+            },
+            {
+              "answer": "RETUR",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "GRILL_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "KARAT",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "LIGHTS",
+          "componentName": "LAMPU_SEN_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "MENYALA",
+              "limit": 100
+            },
+            {
+              "answer": "MATI",
+              "limit": 100
+            },
+            {
+              "answer": "RETUR",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "listComponent": [
+        {
+          "section": "WHEELS",
+          "componentName": "BAN_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "AUS",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIS_BODI_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "KARAT",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "SPION_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "PINTU_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PENYOK",
+              "limit": 100
+            },
+            {
+              "answer": "GORES",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "GLASS",
+          "componentName": "KACA_PINTU_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "HANDLE_PINTU_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "listComponent": [
+        {
+          "section": "GLASS",
+          "componentName": "KACA_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIST_KACA_DEPAN_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "TIANG_B_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "listComponent": [
+        {
+          "section": "GLASS",
+          "componentName": "KACA_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIST_KACA_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "TIANG_B_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "7": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "PINTU_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "GLASS",
+          "componentName": "KACA_PINTU_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "HANDLE_PINTU_DEPAN_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "8": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "PINTU_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "GLASS",
+          "componentName": "KACA_PINTU_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "HANDLE_PINTU_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "9": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "PINTU_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "GLASS",
+          "componentName": "KACA_PINTU_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "HANDLE_PINTU_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "10": {
+      "listComponent": [
+        {
+          "section": "GLASS",
+          "componentName": "KACA_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIST_KACA_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "TIANG_C_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "11": {
+      "listComponent": [
+        {
+          "section": "GLASS",
+          "componentName": "KACA_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIST_KACA_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "TIANG_C_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "12": {
+      "listComponent": [
+        {
+          "section": "WHEELS",
+          "componentName": "BAN_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIS_BODI_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "LIGHTS",
+          "componentName": "LAMPU_SEN_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "13": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "BUMPER_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "KAP_BAGASI_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "LIGHTS",
+          "componentName": "LAMPU_REM_BELAKANG_KIRI",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "14": {
+      "listComponent": [
+        {
+          "section": "BODY",
+          "componentName": "BUMPER_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "KAP_BAGASI_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "LIGHTS",
+          "componentName": "LAMPU_REM_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    },
+    "15": {
+      "listComponent": [
+        {
+          "section": "WHEELS",
+          "componentName": "BAN_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "BODY",
+          "componentName": "LIS_BODI_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        },
+        {
+          "section": "LIGHTS",
+          "componentName": "LAMPU_SEN_BELAKANG_KANAN",
+          "answers": [
+            {
+              "answer": "BAIK",
+              "limit": 100
+            },
+            {
+              "answer": "PECAH",
+              "limit": 100
+            },
+            {
+              "answer": "TIDAK ADA",
+              "limit": 100
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

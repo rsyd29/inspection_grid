@@ -72,7 +72,6 @@
     ]
   },
   "1": {
-    "limit": 100,
     "listComponent": [
       {
         "section": "BODY",

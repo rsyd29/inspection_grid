@@ -61,12 +61,16 @@ class _DynamicInspectionWithGridDynamicState
 
   // Add function to create circle widgets from objectData only for specific grid indices
   List<Widget> _buildCoordCircles(
-    Map<String, dynamic> data,
+    Map<String, dynamic> component,
     int index,
   ) {
     List<Widget> circles = [];
-    if (data.containsKey('$index')) {
-      final components = data['$index'] as List<dynamic>;
+    if (component.containsKey('$index')) {
+      final components = (component['$index'] as List<dynamic>)
+          .map(
+            (e) => e as Map<String, dynamic>,
+          )
+          .toList();
       for (var i = 0; i < components.length; i++) {
         double x = components[i]['x'];
         double y = components[i]['y'];
@@ -114,19 +118,61 @@ class _DynamicInspectionWithGridDynamicState
                         components[i]['y'] = newY;
 
                         // Save changes
-                        _saveUpdatedCoordinates(index.toString(), data);
+                        _saveUpdatedCoordinates(index.toString(), component);
                       });
                     },
                     child: GestureDetector(
-                      onTap: () {
-                        print('show dialog update component: ${components[i]}');
+                      onTap: () async {
+                        // Show update dialog before navigating
+                        await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Update Component'),
+                              content:
+                                  Text('Do you want to update this component?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Update'),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            QuestionComponentPage(
+                                          index: i, // or the appropriate index
+                                          listComponent: components,
+                                          position: Offset(x,
+                                              y), // or the appropriate position
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        setState(() {});
                       },
-                      child: Container(
-                        width: 10.0,
-                        height: 10.0,
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+                      child: Tooltip(
+                        message: components[i].toString(),
+                        child: Container(
+                          width: 10.0,
+                          height: 10.0,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
                     ),

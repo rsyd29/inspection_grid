@@ -128,7 +128,9 @@ class _DynamicInspectionWithGridDynamicState
                     },
                     child: GestureDetector(
                       onTap: () async {
-                        // Show update dialog before navigating
+                        // Use the specific component data for tapped index
+                        final specificComponent = [components[i]];
+
                         await showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -154,9 +156,10 @@ class _DynamicInspectionWithGridDynamicState
                                         Expanded(
                                           child: ListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: components.length,
+                                            itemCount: specificComponent.length,
                                             itemBuilder: (context, index) {
-                                              final item = components[index];
+                                              final item =
+                                                  specificComponent[index];
                                               return Card(
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:

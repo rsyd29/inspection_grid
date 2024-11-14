@@ -67,11 +67,11 @@ class _DynamicInspectionWithGridDynamicState
   List<Widget> _buildCoordCircles(
     Map<String, dynamic> listComponent,
     Map<String, dynamic> component,
-    int index,
+    int indexComponent,
   ) {
     List<Widget> circles = [];
-    if (component.containsKey('$index')) {
-      final components = (component['$index'] as List<dynamic>)
+    if (component.containsKey('$indexComponent')) {
+      final components = (component['$indexComponent'] as List<dynamic>)
           .map(
             (e) => e as Map<String, dynamic>,
           )
@@ -123,7 +123,8 @@ class _DynamicInspectionWithGridDynamicState
                         components[i]['y'] = newY;
 
                         // Save changes
-                        _saveUpdatedCoordinates(index.toString(), component);
+                        _saveUpdatedCoordinates(
+                            indexComponent.toString(), component);
                       });
                     },
                     child: GestureDetector(
@@ -313,8 +314,33 @@ class _DynamicInspectionWithGridDynamicState
                                                           icon: Icon(
                                                               Icons.delete),
                                                           onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
+                                                            // Locate and remove the component from the list
+                                                            List<dynamic>?
+                                                                componentList =
+                                                                component[
+                                                                        '$indexComponent']
+                                                                    as List<
+                                                                        dynamic>?; // Safely cast
+
+                                                            if (componentList !=
+                                                                null) {
+                                                              // Check for null
+                                                              componentList
+                                                                  .removeAt(i);
+
+                                                              // Save the changes after deletion
+                                                              _saveUpdatedCoordinates(
+                                                                  indexComponent
+                                                                      .toString(),
+                                                                  component); // Use original map
+
+                                                              setState(() {});
+                                                              Navigator.pop(
+                                                                  context);
+                                                            } else {
+                                                              print(
+                                                                  'Component at index $indexComponent is null.');
+                                                            }
                                                           },
                                                         ),
                                                       ),
@@ -352,9 +378,10 @@ class _DynamicInspectionWithGridDynamicState
                                                   builder: (context) =>
                                                       QuestionComponentPage(
                                                     index:
-                                                        index, // or the appropriate index
+                                                        indexComponent, // or the appropriate index
                                                     listComponent: (listComponent[
-                                                                    '$index'][
+                                                                    '$indexComponent']
+                                                                [
                                                                 'listComponent']
                                                             as List)
                                                         .map(
@@ -423,6 +450,11 @@ class _DynamicInspectionWithGridDynamicState
   // Save updated coordinates to local storage
   void _saveUpdatedCoordinates(
       String indexKey, Map<String, dynamic> data) async {
+    // Check if the data for a specific key is empty and remove it
+    if (data[indexKey].isEmpty) {
+      data.remove(indexKey);
+    }
+
     // Convert updated data to JSON
     String updatedDataJson = jsonEncode(data);
 

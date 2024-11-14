@@ -55,90 +55,97 @@ class _QuestionComponentPageState extends State<QuestionComponentPage> {
     return damageImagesControllers[answer['answer']]!;
   }
 
-  // void _loadDataFromLocalStorage() async {
-  //   try {
-  //     final storedData = await secureStorageService.getKey(key: 'grid_dynamic');
-  //     if (storedData != null) {
-  //       final Map<String, dynamic> rawData = jsonDecode(storedData);
-  //       final data =
-  //           rawData.map<String, List<Map<String, dynamic>>>((key, value) {
-  //         return MapEntry(
-  //           key,
-  //           List<Map<String, dynamic>>.from(value),
-  //         );
-  //       });
-  //
-  //       selectedDamages = [];
-  //       for (var component in widget.listComponent['components']) {
-  //         String componentIdStr = component['componentId'].toString();
-  //         String partIdStr = widget.listComponent['partId'].toString();
-  //         if (data.containsKey(partIdStr)) {
-  //           for (var damageOptionData in data[partIdStr]!) {
-  //             if (componentIdStr ==
-  //                 damageOptionData['componentId'].toString()) {
-  //               // Check componentId
-  //               for (var damageData in damageOptionData['damageOptions']) {
-  //                 for (var damageOption in component['damageOptions']) {
-  //                   if (damageOption['damageType'] ==
-  //                       damageData['damageType']) {
-  //                     selectedDamages.add(jsonEncode({
-  //                       'componentName': component['componentName'],
-  //                       'damageOption': damageOption,
-  //                     }));
-  //                     MultiImagePickerController controller =
-  //                         getOrCreateController(damageOption);
-  //
-  //                     final imagePaths = [];
-  //                     // Initialize MultiImagePickerView from `damages`
-  //                     if (damageData['damages'] != null) {
-  //                       for (var damage in damageData['damages']) {
-  //                         String path = damage['imagePath'];
-  //                         imageNotes[path] = damage['note'] ?? '';
-  //                         imagePaths.add(path);
-  //                       }
-  //                     }
-  //
-  //                     final imageFiles = imagePaths.map((path) {
-  //                       final fileName = path.split('/').last;
-  //                       final fileExtension = fileName.split('.').last;
-  //
-  //                       return ImageFile(
-  //                         path.hashCode.toString(),
-  //                         name: fileName,
-  //                         extension: fileExtension,
-  //                         path: path,
-  //                       );
-  //                     }).toList();
-  //
-  //                     controller.updateImages(imageFiles);
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //
-  //       print(selectedDamages.toString());
-  //       setState(() {});
-  //     }
-  //   } catch (e, s) {
-  //     print('Error loading data: $e');
-  //     debugPrintStack(stackTrace: s);
-  //   }
-  // }
+  void _loadDataFromLocalStorage() async {
+    try {
+      final storedData = await secureStorageService.getKey(key: 'grid_dynamic');
+      if (storedData != null) {
+        final Map<String, dynamic> rawData = jsonDecode(storedData);
+        final data =
+            rawData.map<String, List<Map<String, dynamic>>>((key, value) {
+          return MapEntry(
+            key,
+            List<Map<String, dynamic>>.from(value),
+          );
+        });
+
+        selectedDamages = [];
+        damageImagesControllers = {};
+        imageNotes = {};
+
+        final componentsForIndex = data[widget.index.toString()];
+        if (componentsForIndex != null) {
+          List<Map<String, dynamic>> listComponents =
+              List<Map<String, dynamic>>.from(componentsForIndex);
+          for (var componentVariable in widget.listComponent) {
+            for (var componentLocal in listComponents) {
+              Offset positionLocal =
+                  Offset(componentLocal['x'], componentLocal['y']);
+              if (positionLocal == widget.position) {
+                for (var answerLocal in componentLocal['answers']) {
+                  for (var answerVariable in componentVariable['answers']) {
+                    if (answerLocal['answer'] == answerVariable['answer']) {
+                      selectedDamages.add(jsonEncode({
+                        'section': componentVariable['section'],
+                        'componentName': componentVariable['componentName'],
+                        'answer': answerVariable,
+                      }));
+
+                      MultiImagePickerController controller =
+                          getOrCreateController(answerVariable);
+
+                      List<String> imagePaths = [];
+                      if (answerLocal['damages'] != null) {
+                        for (var damage in answerLocal['damages']) {
+                          String path = damage['imagePath'];
+                          imageNotes[path] = damage['note'] ?? '';
+                          imagePaths.add(path);
+                        }
+                      }
+
+                      final imageFiles = imagePaths.map((path) {
+                        final fileName = path.split('/').last;
+                        final fileExtension = fileName.split('.').last;
+                        return ImageFile(
+                          path.hashCode.toString(),
+                          name: fileName,
+                          extension: fileExtension,
+                          path: path,
+                        );
+                      }).toList();
+
+                      controller.updateImages(imageFiles);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        setState(() {}); // Update UI with loaded data
+      }
+    } catch (e, s) {
+      print('Error loading data: $e');
+      debugPrintStack(stackTrace: s);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    // _loadDataFromLocalStorage();
+    _loadDataFromLocalStorage();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pertanyaan Komponen'),
+        title: Column(
+          children: [
+            Text('Pertanyaan Komponen'),
+            Text('${widget.position}'),
+          ],
+        ),
       ),
       body: ListView(
         children: [

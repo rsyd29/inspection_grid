@@ -149,7 +149,8 @@ class _DynamicInspectionWithGridDynamicState
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             QuestionComponentPage(
-                                          index: i, // or the appropriate index
+                                          index:
+                                              index, // or the appropriate index
                                           listComponent:
                                               (listComponent['$index']
                                                       ['listComponent'] as List)

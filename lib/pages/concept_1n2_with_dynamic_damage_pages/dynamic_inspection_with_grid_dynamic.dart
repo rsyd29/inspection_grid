@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:inspection_grid/pages/concept_1n2_with_dynamic_damage_pages/question_component_page.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 import '../../generated/assets.dart';
 import '../../services/secure_storage_service.dart';
+import '../full_screen_image_widget.dart';
 
 class DynamicInspectionWithGridDynamic extends StatefulWidget {
   const DynamicInspectionWithGridDynamic({
@@ -128,45 +132,262 @@ class _DynamicInspectionWithGridDynamicState
                         await showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Update Component'),
-                              content:
-                                  Text('Do you want to update this component?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text('Update'),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            QuestionComponentPage(
-                                          index:
-                                              index, // or the appropriate index
-                                          listComponent:
-                                              (listComponent['$index']
-                                                      ['listComponent'] as List)
-                                                  .map(
-                                                    (e) => e
-                                                        as Map<String, dynamic>,
-                                                  )
-                                                  .toList(),
-                                          position: Offset(x,
-                                              y), // or the appropriate position
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    width: double.maxFinite,
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'Komponen Detail Inspeksi',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.center,
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                        SizedBox(height: 16),
+                                        Expanded(
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: components.length,
+                                            itemBuilder: (context, index) {
+                                              final item = components[index];
+                                              return Card(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                elevation: 4,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        '${index + 1}. ${item['componentName'].toString().replaceAll('_', ' ')}',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      SizedBox(height: 8),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children:
+                                                            item['answers']
+                                                                .map<Widget>(
+                                                                    (answer) {
+                                                          return Card(
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12.0),
+                                                            ),
+                                                            elevation: 3,
+                                                            margin: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        8.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap: () async =>
+                                                                      await Navigator
+                                                                          .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              FullScreenImageView(
+                                                                        images: List<
+                                                                            Map<String,
+                                                                                dynamic>>.from(answer['damages'].map((image) => image as Map<
+                                                                            String,
+                                                                            dynamic>)),
+                                                                        initialPage:
+                                                                            0,
+                                                                        keyText:
+                                                                            item['componentName'],
+                                                                        valueText:
+                                                                            answer['answer'],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  child:
+                                                                      SizedBox(
+                                                                    height:
+                                                                        150.0,
+                                                                    child: PhotoViewGallery
+                                                                        .builder(
+                                                                      itemCount:
+                                                                          answer['damages']
+                                                                              .length,
+                                                                      builder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return PhotoViewGalleryPageOptions(
+                                                                          imageProvider:
+                                                                              FileImage(
+                                                                            File(
+                                                                              answer['damages'][index]['imagePath'],
+                                                                            ),
+                                                                          ),
+                                                                          minScale:
+                                                                              PhotoViewComputedScale.contained,
+                                                                          maxScale:
+                                                                              PhotoViewComputedScale.covered * 2,
+                                                                        );
+                                                                      },
+                                                                      pageController:
+                                                                          PageController(),
+                                                                      scrollPhysics:
+                                                                          const BouncingScrollPhysics(),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          8.0,
+                                                                      horizontal:
+                                                                          12.0),
+                                                                  child: Center(
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          '${answer['answer']}',
+                                                                          style: TextStyle(
+                                                                              fontSize: 14,
+                                                                              fontStyle: FontStyle.italic),
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                        ),
+                                                                        Text(
+                                                                          'Ada ${answer['damages'].length} kerusakan',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.red,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                      ),
+                                                      SizedBox(height: 8),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        child: IconButton(
+                                                          icon: Icon(
+                                                              Icons.delete),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor: WidgetStateProperty
+                                                  .all<Color>(Colors
+                                                      .blueAccent), // Updated button style
+                                              padding: WidgetStateProperty.all<
+                                                      EdgeInsets>(
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 12.0)),
+                                              shape: WidgetStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0))),
+                                            ),
+                                            onPressed: () async {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the dialog
+                                              await Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      QuestionComponentPage(
+                                                    index:
+                                                        index, // or the appropriate index
+                                                    listComponent: (listComponent[
+                                                                    '$index'][
+                                                                'listComponent']
+                                                            as List)
+                                                        .map(
+                                                          (e) => e as Map<
+                                                              String, dynamic>,
+                                                        )
+                                                        .toList(),
+                                                    position: Offset(x,
+                                                        y), // or the appropriate position
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              'Tambah Inspeksi Komponen',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      icon: Icon(Icons.close,
+                                          color: Colors.black),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         );

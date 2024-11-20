@@ -523,6 +523,7 @@ class _DynamicInspectionWithGridDynamicState
                           minScale: 0.2,
                           maxScale: 10.0,
                           child: Stack(
+                            alignment: Alignment.center,
                             children: [
                               Image.asset(
                                 data['image'],
@@ -530,51 +531,59 @@ class _DynamicInspectionWithGridDynamicState
                                 height: imageHeight,
                                 fit: BoxFit.cover,
                               ),
-                              GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  childAspectRatio: aspectRatio,
-                                ),
-                                itemCount: listComponent.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTapDown: (details) async {
-                                      setState(() {
-                                        offset = details.localPosition /
-                                            transformationController.value
-                                                .getMaxScaleOnAxis();
-                                      });
-                                    },
-                                    onLongPress: () => _handleTap(
-                                      index,
-                                      data['data'],
+                              Center(
+                                child: SizedBox(
+                                  width: imageWidth,
+                                  height: imageHeight,
+                                  child: GridView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      childAspectRatio: aspectRatio,
                                     ),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                            ),
-                                            color: (objectData?.keys
-                                                        .contains('$index') ??
-                                                    false)
-                                                ? Colors.red.withOpacity(0.5)
-                                                : Colors.transparent,
-                                          ),
-                                        ),
-                                        ..._buildCoordCircles(
-                                          data['data'],
-                                          objectData ?? {},
+                                    itemCount: listComponent.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTapDown: (details) async {
+                                          setState(() {
+                                            offset = details.localPosition /
+                                                transformationController.value
+                                                    .getMaxScaleOnAxis();
+                                          });
+                                        },
+                                        onLongPress: () => _handleTap(
                                           index,
+                                          data['data'],
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                },
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                ),
+                                                color: (objectData?.keys
+                                                            .contains(
+                                                                '$index') ??
+                                                        false)
+                                                    ? Colors.red
+                                                        .withOpacity(0.5)
+                                                    : Colors.transparent,
+                                              ),
+                                            ),
+                                            ..._buildCoordCircles(
+                                              data['data'],
+                                              objectData ?? {},
+                                              index,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
                             ],
                           ),

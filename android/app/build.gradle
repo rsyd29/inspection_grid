@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.legoas.inspection_grid"
-    compileSdk = 34
-    ndkVersion = "25.1.8937393"
+    compileSdk = 36
+    ndkVersion = "28.0.12433566"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
